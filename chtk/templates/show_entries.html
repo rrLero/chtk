@@ -3,6 +3,8 @@
   {% if session.logged_in %}
     <form action="{{ url_for('add_entry') }}" method=post class=add-entry enctype=multipart/form-data>
       <dl>
+        <dt>Tournament File
+        <dd><input type=file name=tour>
         <dt>Images:
         <dd><input type=file name=file>
         <dt>Title:
@@ -17,12 +19,12 @@
   <ul class=entries>
     {% for entry in entries %}
       <li><div class="date" align="right"> {{ entry.date_of_article }}
-      </div><h2 align="center">{{ entry.title }} </h2>
+      </div><h2 align="center">{{ entry.title }} </h2><br>
     {% if entry.images %}
-        <img src="{{ entry.images }}" width="150" align="right"><p>{{ entry.text|safe }}</p>
+        <img src="{{ entry.images }}" width="150" align="right">{{ entry.text|safe }} {% if entry.tour %}<a href="{{ entry.tour }}">ГРУППЫ И РАСПИСАНИЕ</a>{% endif %}
         <div style="clear:both;"></div>
     {% else %}
-      {{ entry.text|safe }}
+      {{ entry.text|safe }} {% if entry.tour %}<a href="{{ entry.tour }}">ГРУППЫ И РАСПИСАНИЕ</a>{% endif %}
     {% endif %}
     </li>
   {% else %}
@@ -31,4 +33,7 @@
 
   {% endfor %}
 
+<div class="footer"><h2 align="center">Черкасский Теннисный Клуб</h2><hr>
+  <div align="center"> Дизайнер и программист - <b>Левченко Роман</b></div>
+</div>
 {% endblock %}

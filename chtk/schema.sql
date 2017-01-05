@@ -5,4 +5,5 @@ create table entries (
   'text' text not null,
   'date_of_article' text not null,
   'images' BLOB null
+  'tour' BLOB null
 );

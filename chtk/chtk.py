@@ -20,6 +20,7 @@ app.config.from_object(__name__) # load config from this file , chtk.py
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
+    UPLOAD_FOLDER_TOUR='static/tours/',
     UPLOAD_FOLDER='static/images/',
     DATABASE=os.path.join(app.root_path, 'chtk.db'),
     SECRET_KEY='development key',
@@ -69,7 +70,7 @@ def close_db(error):
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, text, date_of_article, images from entries order by id desc')
+    cur = db.execute('select title, text, date_of_article, images, tour from entries order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -81,14 +82,21 @@ def add_entry():
     db = get_db()
     dt = time.strftime("%d/%m/%Y")
     file = request.files['file']
+    tour = request.files['tour']
+    if tour:
+        filename_tour = secure_filename(tour.filename)
+        path_to_file_tour = os.path.join(app.config['UPLOAD_FOLDER_TOUR'], filename_tour)
+        tour.save(os.path.join(app.config['UPLOAD_FOLDER_TOUR'], filename_tour))
+    else:
+        path_to_file_tour = None
     if file:
         filename = secure_filename(file.filename)
         path_to_file = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     else:
         path_to_file = None
-    db.execute('insert into entries (title, text, date_of_article, images) values (?, ?, ?, ?)',
-                 [request.form['title'], request.form['text'], dt, path_to_file])
+    db.execute('insert into entries (title, text, date_of_article, images, tour) values (?, ?, ?, ?, ?)',
+                 [request.form['title'], request.form['text'], dt, path_to_file, path_to_file_tour])
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
@@ -122,7 +130,7 @@ parsed_string = json.loads(json_string)
 points = Points()
 tour_result = TourResult(parsed_string)
 f.close()
-calendar = Calendar()
+#calendar = Calendar()
 
 
 def rating_show(parsed_string):
@@ -170,7 +178,8 @@ def pick_num_tour():
 @app.route('/tour/<int:tour_id>/')
 def shopping(tour_id):
     num_tour = tour_result.tour_result(tour_id)
-    date = calendar.get_date(tour_id)
+    date = Calendar()
+    date = date.get_date(tour_id)
     return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, date=date)
 
 
