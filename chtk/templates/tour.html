@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block body %}
+<body>
+<div class="header">
+    <div class=flash align="center">Результаты турнира {{ date  }}</div>
+            <table border="1" align="center">
+                {% for el in num_tour %}
+                <tr>
+                <td> {{el[1][0]}} {{ el[1][1] }} </td><td> {{ el[0] }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+  {% block body %}
+<body>
+<div class="header">
+    <div class=flash align="center">Парный рейтинг 2016</div>
+    <ul>
+        <table border="1" align="center">
+        {% for el in peremen %}
+            <tr>
+                <td>{{ counter }}</td><td>{{el[0]}}</td><td>{{el[1]}}</td>
+                    {% set counter = counter + 1 %}
+            </tr>
+        {% endfor %}
+        </table>
+    </ul>
+</div>
+</body>
+{% endblock %}
