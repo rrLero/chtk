@@ -1,16 +1,14 @@
-# all the imports
+# -*- coding: utf-8 -*-
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
-from flask import render_template
 from points import Points
 from tour_result import TourResult
-from calendar import Calendar
+from mycalendar import MyCalendar
 import json
 import os
 import sqlite3
 import time
 from werkzeug import secure_filename
-
 
 
 app = Flask(__name__)
@@ -130,7 +128,6 @@ parsed_string = json.loads(json_string)
 points = Points()
 tour_result = TourResult(parsed_string)
 f.close()
-#calendar = Calendar()
 
 
 def rating_show(parsed_string):
@@ -178,8 +175,9 @@ def pick_num_tour():
 @app.route('/tour/<int:tour_id>/')
 def shopping(tour_id):
     num_tour = tour_result.tour_result(tour_id)
-    date = Calendar()
+    date = MyCalendar()
     date = date.get_date(tour_id)
+    print(date)
     return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, date=date)
 
 
