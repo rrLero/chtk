@@ -177,7 +177,6 @@ def shopping(tour_id):
     num_tour = tour_result.tour_result(tour_id)
     date = MyCalendar()
     date = date.get_date(tour_id)
-    print(date)
     return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, date=date)
 
 
