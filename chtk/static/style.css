@@ -12,8 +12,7 @@ h2              { font-size: 1.2em; }
 .entries li h2  { margin-left: -1em; }
 .add-entry      { font-size: 0.9em; border-bottom: 1px solid #ccc; }
 .add-entry dl   { font-weight: bold; }
-.metanav        { text-align: right; font-size: 0.8em; padding: 0.1em;
-                  margin-bottom: 1em; background: #FDF5E6; }
+.metanav        { padding: 0.4em; margin-bottom: 0.5em; background: #CCC49F; }
 .flash          { background: #cee5F5; padding: 0.5em;
                   border: 1px solid #aacbe2; }
 .error          { background: #f0d6d6; padding: 0.5em; }
@@ -26,3 +25,4 @@ ul.hr li        { display: inline-block; /* Отображать как стро
 .footer         {  	padding: 10px 0; background-color: #CCC49F; }
 .picture        {margin: 7px 0 7px 7px; /* Отступы вокруг картинки */}
 .rules          {margin: 0px 40px ; /* Отступы вокруг текста */}
+.title          {  font-family: 'Georgia', serif; font-size: 2em; padding-left: 30px; }

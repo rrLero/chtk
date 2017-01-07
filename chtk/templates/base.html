@@ -4,14 +4,17 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <div class=page>
     <div class=metanav>
-    {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}"><input type="image" src="/static/login_button.png" width="45"</a>
-    {% else %}
-        <a href="{{ url_for('logout') }}"><input type="image" src="/static/logout_button.png" width="45"</a>
-    {% endif %}
 
-  <h1 align="center"> <a href="/"> <img src="{{ url_for('static', filename='logo2.png') }}" width="150"></h1></div>
-    <h1 align="center"><a href="/"> Черкасский Теннисный Клуб </a></h1>
+        <div align="left"> <a href="/"> <img src="{{ url_for('static', filename='logo2.png') }}" width="150" align="middle" ></a>
+            <a href="/" class="title"><b>Черкасский Теннисный Клуб</b></a>
+            {% if not session.logged_in %}
+                <a href="{{ url_for('login') }}"><input type="image" src="/static/login_button.png" width="45" align="right"></a>
+            {% else %}
+                <a href="{{ url_for('logout') }}"><input type="image" src="/static/logout_button.png" width="45" align="right"></a>
+            {% endif %}
+        </div>
+    </div>
+
   <div class=metanav>
       <center>
           <ul class="hr">
