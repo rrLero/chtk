@@ -5,13 +5,13 @@
 <div class=page>
     <div class=metanav>
     {% if not session.logged_in %}
-        <a href="{{ url_for('login') }}">log in</a>
+        <a href="{{ url_for('login') }}"><input type="image" src="/static/login_button.png" width="45"</a>
     {% else %}
-        <a href="{{ url_for('logout') }}">log out</a>
+        <a href="{{ url_for('logout') }}"><input type="image" src="/static/logout_button.png" width="45"</a>
     {% endif %}
-    </div>
-  <h1 align="center"><img src="{{ url_for('static', filename='logo2.png') }}" width="150" height="150"></h1>
-    <h1 align="center"><a href="/"> Черкасский теннисный клуб </a></h1>
+
+  <h1 align="center"> <a href="/"> <img src="{{ url_for('static', filename='logo2.png') }}" width="150"></h1></div>
+    <h1 align="center"><a href="/"> Черкасский Теннисный Клуб </a></h1>
   <div class=metanav>
       <center>
           <ul class="hr">
