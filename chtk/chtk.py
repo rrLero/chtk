@@ -20,6 +20,7 @@ app.config.from_object(__name__) # load config from this file , chtk.py
 app.config.update(dict(
     UPLOAD_FOLDER_TOUR='static/tours/',
     UPLOAD_FOLDER='static/images/',
+    UPLOAD_FOLDER_PLAYERS='static/players/',
     DATABASE=os.path.join(app.root_path, 'chtk.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
@@ -69,8 +70,29 @@ def close_db(error):
 def show_entries():
     db = get_db()
     cur = db.execute('select title, text, date_of_article, images, tour from entries order by id desc')
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
     entries = cur.fetchall()
-    return render_template('show_entries.html', entries=entries)
+    players = cur_1.fetchall()
+    return render_template('show_entries.html', entries=entries, players=players)
+
+
+@app.route('/add_photo', methods=['POST'])
+def add_photo():
+    if not session.get('logged_in'):
+        abort(401)
+    db = get_db()
+    file = request.files['file']
+    player_id = request.form['title']
+    if file:
+        filename = secure_filename(file.filename)
+        path_to_file = os.path.join(app.config['UPLOAD_FOLDER_PLAYERS'], filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER_PLAYERS'], filename))
+    else:
+        path_to_file = None
+    db.execute("update players set path_photo = '%s' where id = '%d'" % (path_to_file, int(player_id)))
+    db.commit()
+    flash('New PHOTO was successfully posted')
+    return render_template('player.html', player_id=player_id, players=get_data_players())
 
 
 @app.route('/add', methods=['POST'])
@@ -153,23 +175,22 @@ def number_of_tournaments():
     return len(parsed_string[0])-2
 
 
-@app.route('/base.html')
-@app.route('/')
-def show_method():
+def get_data_players():
+    db = get_db()
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
+    players = cur_1.fetchall()
+    return players
 
-    return render_template("base.html", number=number_of_tournaments())
+
+def show_method():
+    return render_template("base.html", number=number_of_tournaments(), players=get_data_players())
 
 
 @app.route('/rating/')
 def show_method_2():
     peremen = rating_show(parsed_string)
     counter = 1
-    return render_template("rating.html", peremen=peremen, counter=counter)
-
-
-@app.route('/tour/')
-def pick_num_tour():
-    return render_template('picktour.html')
+    return render_template("rating.html", peremen=peremen, counter=counter, players=get_data_players())
 
 
 @app.route('/tour/<int:tour_id>/')
@@ -177,17 +198,22 @@ def shopping(tour_id):
     num_tour = tour_result.tour_result(tour_id)
     date = MyCalendar()
     date = date.get_date(tour_id)
-    return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, date=date)
+    return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, date=date, players=get_data_players())
+
+
+@app.route('/player/<int:player_id>/')
+def player(player_id):
+    return render_template("player.html", player_id=player_id, players=get_data_players())
 
 
 @app.route('/rules/')
 def rules():
-    return render_template('test.html')
+    return render_template('test.html', players=get_data_players())
 
 
 @app.route('/contacts/')
 def contacts():
-    return render_template('contacts.html')
+    return render_template('contacts.html', players=get_data_players())
 
 
 if __name__ == '__main__':

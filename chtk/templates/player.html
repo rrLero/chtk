@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block body %}
+<body>
+<div class="header">
+    <div class=flash align="center">ИГРОК</div>
+        {% for player in players %}
+            {% if player.id == player_id %}
+                <h1 align="center">{{ player.player_surname }} {{ player.player_name }} </h1>
+                {% if player.path_photo %}
+                <div align="center"> <img src="/{{ player.path_photo }}" width="200" class="picture"></div>
+                {% else %}
+                    <div align="center"> <img src="/static/players/no_photo.jpg" width="200" class="picture"></div>
+                    {% if session.logged_in %}
+                        <form action="{{ url_for('add_photo') }}" method=post class=add-entry enctype=multipart/form-data>
+                          <dl>
+                            <dt>Images:
+                            <dd><input type=file name=file>
+                            <dd><input type=submit value=Share>
+                              <dt>{{player.id}}
+                            <dd><input type=text size=2 name=title>
+                          </dl>
+                        </form>
+                    {% endif %}
+
+
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+</div>
+</body>
+{% endblock %}
