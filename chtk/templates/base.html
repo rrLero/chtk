@@ -26,6 +26,13 @@
                         <option value="/tour/{{ i }}/"> Турнир {{ i }}</option>
                         {% endfor %}
                     </select></form></li>
+              <li><form method="post" name="drop_down_box">
+                    <select name="menu" size="1" onchange="top.location=this.value">
+                        <option value="Игроки" >Игроки Клуба ЧТК</option>
+                        {% for player in players %}
+                        <option value="/player/{{player.id}}/"> {{ player.player_surname }} {{ player.player_name}}</option>
+                        {% endfor %}
+                    </select></form></li>
               <li><form action="/rules/"><input type="submit" value="Правила"></form></li>
               <li><form action="/contacts/"><input type="submit" value="Контакты"></form></li>
           </ul>
