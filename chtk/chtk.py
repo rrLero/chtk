@@ -9,6 +9,7 @@ import os
 import sqlite3
 import time
 from werkzeug import secure_filename
+from StatsPlayers import StatsPlayers
 
 
 app = Flask(__name__)
@@ -70,7 +71,7 @@ def close_db(error):
 def show_entries():
     db = get_db()
     cur = db.execute('select title, text, date_of_article, images, tour from entries order by id desc')
-    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by id')
     entries = cur.fetchall()
     players = cur_1.fetchall()
     return render_template('show_entries.html', entries=entries, players=players)
@@ -153,7 +154,8 @@ f.close()
 
 
 def rating_show(parsed_string):
-    new_list = []
+    new_list = {}
+    counter = 1
     rating = {}
     for el in parsed_string:
         s = 1
@@ -165,10 +167,17 @@ def rating_show(parsed_string):
     while rating:
         for key, el in rating.items():
             if el == max(rating.values()):
-                new_list.append([key, el])
+                new_list[counter] = {'Очки': el, 'Фамилия': key}
+                counter += 1
                 rating.pop(key)
                 break
     return new_list
+
+
+def get_position(rating):
+    for key, el in rating_show(parsed_string).items():
+        if el['Очки'] == rating:
+            return key
 
 
 def number_of_tournaments():
@@ -177,7 +186,7 @@ def number_of_tournaments():
 
 def get_data_players():
     db = get_db()
-    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by id')
     players = cur_1.fetchall()
     return players
 
@@ -189,8 +198,7 @@ def show_method():
 @app.route('/rating/')
 def show_method_2():
     peremen = rating_show(parsed_string)
-    counter = 1
-    return render_template("rating.html", peremen=peremen, counter=counter, players=get_data_players())
+    return render_template("rating.html", peremen=peremen, players=get_data_players())
 
 
 @app.route('/tour/<int:tour_id>/')
@@ -203,7 +211,16 @@ def shopping(tour_id):
 
 @app.route('/player/<int:player_id>/')
 def player(player_id):
-    return render_template("player.html", player_id=player_id, players=get_data_players())
+    db = get_db()
+    name = db.execute('select player_name from players where id = %d' % player_id)
+    name = name.fetchone()
+    surname = db.execute('select player_surname from players where id = %d' % player_id)
+    surname = surname.fetchone()
+    stats = StatsPlayers()
+    list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
+    position = get_position(list_of_player[0])
+    list_of_player.append(position)
+    return render_template("player.html", player_id=player_id, players=get_data_players(), list_of_player=list_of_player)
 
 
 @app.route('/rules/')

@@ -7,10 +7,17 @@
         {% for player in players %}
             {% if player.id == player_id %}
                 <h1 align="center">{{ player.player_surname }} {{ player.player_name }} </h1>
+                <h1 align="center"> № {{ list_of_player[5] }}</h1>
                 {% if player.path_photo %}
                 <div align="center"> <img src="/{{ player.path_photo }}" width="200" class="picture"></div>
                 {% else %}
                     <div align="center"> <img src="/static/players/no_photo.jpg" width="200" class="picture"></div>
+                {% endif %}
+                <h2 align="center">  Сыграно {{ list_of_player[1] }} турниров</h2><br>
+                 <h2 align="center"> <img src="/static/gold.png" width="35" align="middle"> - {% if list_of_player[2] %} {{ list_of_player[2] }} {% endif %}
+                 <img src="/static/silver.png" width="35" align="middle"> - {% if list_of_player[3] %} {{ list_of_player[3] }} {% endif %}
+                 <img src="/static/bronze.png" width="35" align="middle"> - {% if list_of_player[4] %} {{ list_of_player[4] }} {% endif %} </h2>
+
                     {% if session.logged_in %}
                         <form action="{{ url_for('add_photo') }}" method=post class=add-entry enctype=multipart/form-data>
                           <dl>
@@ -24,8 +31,10 @@
                     {% endif %}
 
 
-                {% endif %}
+
             {% endif %}
+
+
         {% endfor %}
 
 </div>

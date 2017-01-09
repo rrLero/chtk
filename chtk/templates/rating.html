@@ -6,10 +6,9 @@
     <div class=flash align="center">Парный рейтинг 2016</div>
     <ul>
         <table border="1" align="center">
-        {% for el in peremen %}
+        {% for key, el in peremen.items() %}
             <tr>
-                <td>{{ counter }}</td><td>{{el[0]}}</td><td>{{el[1]}}</td>
-                    {% set counter = counter + 1 %}
+                <td>{{ key }}</td><td>{{ el['Фамилия'] }}</td><td>{{ el['Очки'] }}</td>
             </tr>
         {% endfor %}
         </table>
