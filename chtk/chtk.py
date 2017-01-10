@@ -40,10 +40,10 @@ dab = SQLAlchemy(app)
 class Entries(dab.Model):
     id = dab.Column(dab.Integer, primary_key=True)
     title = dab.Column(dab.String(100))
-    text = dab.Column(dab.String(100))
-    date_of_article = dab.Column(dab.String(80))
-    images = dab.Column(dab.String(120))
-    tour = dab.Column(dab.String(120))
+    text = dab.Column(dab.String(450))
+    date_of_article = dab.Column(dab.String(20))
+    images = dab.Column(dab.String(60))
+    tour = dab.Column(dab.String(60))
 
     def __str__(self):
         return self.username
@@ -51,9 +51,9 @@ class Entries(dab.Model):
 
 class Players(dab.Model):
     id = dab.Column(dab.Integer, primary_key=True)
-    player_name = dab.Column(dab.String(100))
-    player_surname = dab.Column(dab.String(100))
-    path_photo = dab.Column(dab.String(100))
+    player_name = dab.Column(dab.String(20))
+    player_surname = dab.Column(dab.String(20))
+    path_photo = dab.Column(dab.String(40))
 
     def __str__(self):
         return self.username
