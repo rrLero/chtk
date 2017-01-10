@@ -10,14 +10,15 @@ import sqlite3
 import time
 from werkzeug import secure_filename
 from StatsPlayers import StatsPlayers
+from flask_admin import Admin
+from flask_sqlalchemy import SQLAlchemy
+from flask_admin.contrib import sqla
 
 
 app = Flask(__name__)
 
 
 app.config.from_object(__name__) # load config from this file , chtk.py
-
-# Load default config and override config from an environment variable
 app.config.update(dict(
     UPLOAD_FOLDER_TOUR='static/tours/',
     UPLOAD_FOLDER='static/images/',
@@ -25,9 +26,46 @@ app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'chtk.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
-    PASSWORD='default'
+    PASSWORD='default',
+    SQLALCHEMY_ECHO=True,
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
+
 ))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + app.config['DATABASE']
 app.config.from_envvar('CHTK_SETTINGS', silent=True)
+
+dab = SQLAlchemy(app)
+
+
+class Entries(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    title = dab.Column(dab.String(100))
+    text = dab.Column(dab.String(100))
+    date_of_article = dab.Column(dab.String(80))
+    images = dab.Column(dab.String(120))
+    tour = dab.Column(dab.String(120))
+
+    def __str__(self):
+        return self.username
+
+
+class Players(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    player_name = dab.Column(dab.String(100))
+    player_surname = dab.Column(dab.String(100))
+    path_photo = dab.Column(dab.String(100))
+
+    def __str__(self):
+        return self.username
+
+
+class MyModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        if not session.get('logged_in'):
+            return False
+        else:
+            return True
 
 
 def connect_db():
@@ -232,6 +270,10 @@ def rules():
 def contacts():
     return render_template('contacts.html', players=get_data_players())
 
+
+admin = Admin(app, name='chtk', template_mode='bootstrap3')
+admin.add_view(MyModelView(Entries, dab.session))
+admin.add_view(MyModelView(Players, dab.session))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
