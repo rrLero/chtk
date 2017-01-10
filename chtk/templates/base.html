@@ -35,6 +35,7 @@
                     </select></form></li>
               <li><form action="/rules/"><input type="submit" value="Правила"></form></li>
               <li><form action="/contacts/"><input type="submit" value="Контакты"></form></li>
+              {% if session.logged_in %}<li><form action="/admin/"><input type="submit" value="Админка"></form></li>{% endif %}
           </ul>
       </center>
   </div>

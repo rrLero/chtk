@@ -13,6 +13,7 @@ from StatsPlayers import StatsPlayers
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib import sqla
+from flask_admin import BaseView, expose
 
 
 app = Flask(__name__)
@@ -66,6 +67,12 @@ class MyModelView(sqla.ModelView):
             return False
         else:
             return True
+
+
+class AnalyticsView(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('show_entries.html')
 
 
 def connect_db():
@@ -274,6 +281,7 @@ def contacts():
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
 admin.add_view(MyModelView(Entries, dab.session))
 admin.add_view(MyModelView(Players, dab.session))
+admin.add_view(AnalyticsView(name='BasePage', endpoint='analytics'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
