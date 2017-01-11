@@ -15,13 +15,12 @@
       </dl>
     </form>
   {% endif %}
-
   <ul class=entries>
-    {% for entry in entries %}
+    {% for entry in pagination.items %}
       <li><div class="date" align="right"> {{ entry.date_of_article }}</div>
 
     {% if entry.images %}
-        <img src="{{ entry.images }}" width="200" align="right" class="picture"><h2 align="center">{{ entry.title }} </h2><br>{{ entry.text|safe }} {% if entry.tour %}<a href="{{ entry.tour }}">ГРУППЫ И РАСПИСАНИЕ</a>{% endif %}
+        <img src="/{{ entry.images }}" width="200" align="right" class="picture"><h2 align="center">{{ entry.title }} </h2><br>{{ entry.text|safe }} {% if entry.tour %}<a href="{{ entry.tour }}">ГРУППЫ И РАСПИСАНИЕ</a>{% endif %}
         <div style="clear:both;"></div>
     {% else %}
         <h2 align="center">{{ entry.title }} </h2><br>
@@ -31,10 +30,17 @@
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>
   </ul>
-
-  {% endfor %}
-
+{% endfor %}
+<div class=pagination>
+{% if pagination.has_prev -%}<a href="{{ url_for('show_entries', page = pagination.prev_num) }}">&laquo; Previous</a>{%- else -%}<span class=disabled>&laquo; Previous</span>{% endif %}{#
+  #} <strong>{{ pagination.page }}</strong> {#
+  #}
+{% if pagination.has_next %}<a href="{{ url_for('show_entries', page = pagination.next_num) }}">Next &raquo;</a>{% else %}<span class=disabled>Next &raquo;</span>{% endif %}
+</div>
 <div class="footer"><h2 align="center">Черкасский Теннисный Клуб</h2><hr>
   <div align="center"> Дизайнер и программист - <b>Левченко Роман</b></div>
 </div>
+
+
+
 {% endblock %}

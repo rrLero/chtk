@@ -26,3 +26,6 @@ ul.hr li        { display: inline-block; /* Отображать как стро
 .picture        {margin: 7px 0 7px 7px; /* Отступы вокруг картинки */}
 .rules          {margin: 0px 40px ; /* Отступы вокруг текста */}
 .title          {  font-family: 'Georgia', serif; font-size: 2em; padding-left: 30px; }
+/* pagination */
+div.pagination          { margin: 36px 0 0 0; text-align: center; }
+div.pagination strong   { font-weight: normal; font-style: italic; }
