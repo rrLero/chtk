@@ -19,6 +19,7 @@
                  {% if list_of_player[4] %}<img src="/static/bronze.png" width="35" align="middle"> -  {{ list_of_player[4] }} {% endif %} </h2>
 
                     {% if session.logged_in %}
+                        {% if not player.path_photo %}
                         <form action="{{ url_for('add_photo') }}" method=post class=add-entry enctype=multipart/form-data>
                           <dl>
                             <dt>Images:
@@ -28,6 +29,7 @@
                             <dd><input type=text size=2 name=title>
                           </dl>
                         </form>
+                       {% endif %}
                     {% endif %}
 
 
