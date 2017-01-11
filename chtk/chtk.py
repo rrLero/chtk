@@ -72,7 +72,7 @@ class MyModelView(sqla.ModelView):
 class AnalyticsView(BaseView):
     @expose('/')
     def index(self):
-        return self.render('show_entries.html')
+        return self.render('base.html')
 
 
 def connect_db():
@@ -112,14 +112,14 @@ def close_db(error):
         g.sqlite_db.close()
 
 
+@app.route('/<int:page>/', methods=['GET', 'POST'])
 @app.route('/')
-def show_entries():
+def show_entries(page=1):
+    pagination = Entries.query.order_by(Entries.id.desc()).paginate(page, 3, False)
     db = get_db()
-    cur = db.execute('select title, text, date_of_article, images, tour from entries order by id desc')
     cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by id')
-    entries = cur.fetchall()
     players = cur_1.fetchall()
-    return render_template('show_entries.html', entries=entries, players=players)
+    return render_template('show_entries.html', players=players, pagination=pagination)
 
 
 @app.route('/add_photo', methods=['POST'])
