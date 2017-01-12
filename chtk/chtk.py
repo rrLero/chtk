@@ -193,16 +193,23 @@ def logout():
 f = open('new_list_2.txt', 'r')
 json_string = f.readline()
 parsed_string = json.loads(json_string)
-points = Points()
-tour_result = TourResult(parsed_string)
 f.close()
 
+f_2017 = open('new_list_2017.txt', 'r')
+json_string_new = f_2017.readline()
+parsed_string_new = json.loads(json_string_new)
+f_2017.close()
 
-def rating_show(parsed_string):
+points = Points()
+tour_result = TourResult(parsed_string)
+tour_result_2017 = TourResult(parsed_string_new)
+
+
+def rating_show(list_year):
     new_list = {}
     counter = 1
     rating = {}
-    for el in parsed_string:
+    for el in list_year:
         s = 1
         points_1 = 0
         while ('Турнир_' + str(s)) in el:
@@ -219,14 +226,14 @@ def rating_show(parsed_string):
     return new_list
 
 
-def get_position(rating):
-    for key, el in rating_show(parsed_string).items():
+def get_position(rating, list_year):
+    for key, el in rating_show(list_year).items():
         if el['Очки'] == rating:
             return key
 
 
-def number_of_tournaments():
-    return len(parsed_string[0])-2
+def number_of_tournaments(list_year):
+    return len(list_year[0])-2
 
 
 def get_data_players():
@@ -237,13 +244,16 @@ def get_data_players():
 
 
 def show_method():
-    return render_template("base.html", number=number_of_tournaments(), players=get_data_players())
+    return render_template("base.html", number=number_of_tournaments(parsed_string), players=get_data_players())
 
 
-@app.route('/rating/')
-def show_method_2():
-    peremen = rating_show(parsed_string)
-    return render_template("rating.html", peremen=peremen, players=get_data_players())
+@app.route('/rating/<int:year>/')
+def show_method_1(year):
+    if year == 2016:
+        peremen = rating_show(parsed_string)
+    elif year == 2017:
+        peremen = rating_show(parsed_string_new)
+    return render_template("rating.html", peremen=peremen, players=get_data_players(), year=year)
 
 
 @app.route('/tour/<int:tour_id>/')
@@ -263,7 +273,7 @@ def player(player_id):
     surname = surname.fetchone()
     stats = StatsPlayers()
     list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
-    position = get_position(list_of_player[0])
+    position = get_position(list_of_player[0], parsed_string)
     list_of_player.append(position)
     return render_template("player.html", player_id=player_id, players=get_data_players(), list_of_player=list_of_player)
 
