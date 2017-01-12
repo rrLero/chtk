@@ -18,17 +18,23 @@
   <div class=metanav>
       <center>
           <ul class="hr">
-              <li><form action="/rating/"><input type="submit" value="Рейтинг"></form></li>
               <li><form method="post" name="drop_down_box">
                     <select name="menu" size="1" onchange="top.location=this.value">
-                        <option value="Результат турнира">Результат турнира</option>
+                        <option value="Рейтинг">Рейтинг</option>
+                        {% for i in range(2016, 2018) %}
+                        <option value="/rating/{{ i }}/"> Рейтинг {{ i }}</option>
+                        {% endfor %}
+                    </select></form></li>
+              <li><form method="post" name="drop_down_box">
+                    <select name="menu" size="1" onchange="top.location=this.value">
+                        <option value="Результат турнира">Турниры 2016</option>
                         {% for i in range(1, 21) %}
                         <option value="/tour/{{ i }}/"> Турнир {{ i }}</option>
                         {% endfor %}
                     </select></form></li>
               <li><form method="post" name="drop_down_box">
                     <select name="menu" size="1" onchange="top.location=this.value">
-                        <option value="Игроки" >Игроки Клуба ЧТК</option>
+                        <option value="Игроки" >Игроки ЧТК 2016</option>
                         {% for player in players %}
                         <option value="/player/{{player.id}}/"> {{ player.player_surname }} {{ player.player_name}}</option>
                         {% endfor %}

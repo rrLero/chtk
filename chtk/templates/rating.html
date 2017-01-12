@@ -3,12 +3,12 @@
   {% block body %}
 <body>
 <div class="header">
-    <div class=flash align="center">Парный рейтинг 2016</div>
+    <div class=flash align="center">Парный рейтинг {{year}}</div>
     <ul>
         <table border="1" align="center">
         {% for key, el in peremen.items() %}
             <tr>
-                <td>{{ key }}</td><td>{{ el['Фамилия'] }}</td><td>{{ el['Очки'] }}</td>
+                {% if el['Очки'] != 0 and el['Очки'] %}<td>{{ key }}</td><td>{{ el['Фамилия'] }}</td><td>{{ el['Очки'] }}</td>{% endif %}
             </tr>
         {% endfor %}
         </table>

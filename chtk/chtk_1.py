@@ -4,14 +4,23 @@ from tour_result import TourResult
 import json
 from getPlayer_from_list import GetPlayer
 
-f = open('new_list_2.txt', 'r')
-json_string = f.readline()
+print('С каким годом будете работать 2016 или 2017')
+year = int(input())
 
-parsed_string = json.loads(json_string)
-f.close()
+if year == 2016:
+    f = open('new_list_2.txt', 'r')
+    json_string = f.readline()
+    parsed_string = json.loads(json_string)
+    f.close()
+elif year == 2017:
+    f = open('new_list_2017.txt', 'r')
+    json_string = f.readline()
+    parsed_string = json.loads(json_string)
+    f.close()
+
 
 n = 1
-print(parsed_string)
+
 points = Points()
 tour_result = TourResult(parsed_string)
 
@@ -28,6 +37,8 @@ while n != 0:
     print('| 3 - Если хотите увидеть рейтинг:')
     print('| 4 - Если хотите изменить данные игрока')
     print('| 5 - Если хотите добавить игрока игрока')
+    print('| 6 - Если хотите создать новый файл на 2017 год')
+
     n = int(input())
     rating = {}
     print()
@@ -55,7 +66,7 @@ while n != 0:
             else:
                 print('Некорректный ввод')
         f.close()
-        f = open('new_list_2.txt', 'w')
+        f = open('new_list_2017.txt', 'w')
         f.write(json.dumps(parsed_string))
         f.close()
         print(parsed_string)
@@ -99,7 +110,7 @@ while n != 0:
                     el['Имя'] = new_name
                     el['Фамилия'] = new_surname
                     f.close()
-                    f = open('new_list_2.txt', 'w')
+                    f = open('new_list_2017.txt', 'w')
                     f.write(json.dumps(parsed_string))
                     f.close()
                     break
@@ -122,21 +133,28 @@ while n != 0:
         for i in range(1, number_of_tournaments()+1):
             new_player['Турнир_'+str(i)] = 0
         parsed_string.append(new_player)
-        f = open('new_list_2.txt', 'w')
+        f = open('new_list_2017.txt', 'w')
         f.write(json.dumps(parsed_string))
         f.close()
 
+    elif n == 6:
+        parsed_string_new = []
+        el_new = {}
+        f = open('new_list_2.txt', 'r')
+        json_string = f.readline()
+        parsed_string = json.loads(json_string)
+        f.close()
+        i = 0
+        for el in parsed_string:
 
+            el_new['Фамилия'] = el['Фамилия']
+            el_new['Имя'] = el['Имя']
 
-        # for el in parsed_string:
-        #     print(el)
-            # if el['Фамилия'] == surname and el['Имя'] == name:
-            #     el['Имя'] = new_name
-            #     el['Фамилия'] = new_surname
-            #     f.close()
-            #     f = open('new_list_2.txt', 'w')
-            #     f.write(json.dumps(parsed_string))
-            #     f.close()
-            #     break
+            parsed_string_new.append(dict(el_new))
 
-    f.close()
+            i += 1
+
+        print(parsed_string_new)
+        f_2017 = open('new_list_2017.txt', 'w')
+        f_2017.write(json.dumps(parsed_string_new))
+   # f.close()
