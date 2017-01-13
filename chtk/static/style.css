@@ -22,7 +22,7 @@ ul.hr li        { display: inline-block; /* Отображать как стро
                   margin-right: 5px; /* Отступ слева */
                   }
 .date           { font-size: 0.7em; }
-.footer         {  	padding: 10px 0; background-color: #CCC49F; }
+.footer         {clear: left;  	padding: 10px 0; background-color: #CCC49F; }
 .picture        {margin: 7px 0 7px 7px; /* Отступы вокруг картинки */}
 .rules          {margin: 0px 40px ; /* Отступы вокруг текста */}
 .title          {  font-family: 'Georgia', serif; font-size: 2em; padding-left: 30px; }
