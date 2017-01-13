@@ -39,9 +39,9 @@
   #}
 {% if pagination.has_next %}<a href="{{ url_for('show_entries', page = pagination.next_num) }}">Next &raquo;</a>{% else %}<span class=disabled>Next &raquo;</span>{% endif %}
 </div>
-
+<p>
     <div id="chatovod230291">
     <script type="text/javascript">(function() {var po = document.createElement('script');po.type = 'text/javascript'; po.charset = "UTF-8"; po.async = true;po.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + '//chtk.chatovod.ru/widget.js?height=250&divId=chatovod230291';var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(po, s);})();</script>
     </div>
-
+</p>
 {% endblock %}
