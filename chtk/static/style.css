@@ -29,68 +29,67 @@ ul.hr li        { display: inline-block; /* Отображать как стро
 /* pagination */
 div.pagination          { margin: 0px 0 0 0; text-align: center; }
 div.pagination strong   { font-weight: normal; font-style: italic; }
-
-.menu{
-    padding:0 0 20px;
-    text-align:center;
-}
-.menu ul{
-    display:block;
-    height:40px;
-    padding:0 20px;
-    background:#F47F20;
-}
-.menu li{
-    display:inline-block;
-    margin:0 -2px;
-    position:relative;
-}
-.menu li a{
-    display:block;
-    height:20px;
-    padding:10px 15px;
-    line-height:20px;
-    color:#fff;
-    font-weight:700;
-    text-decoration:none;
-    /*outline:1px solid crimson;*/
-}
-.menu li a:hover{
-    background:#2C3093;
-}
-.menu li ul{
-    height:auto;
-    background:#2C3093;
-    display:none;
-    position:absolute;
-    top:40px;
-    left:0;
-    z-index:5;
-    width:230px;
-    text-align:left;
-    font-size:90%;
-    padding:0;
-}
-.menu li:hover > a{
-    background:#2C3093;
-}
-.menu li li{
-    display:block;
-}
-.menu li li a{
-    height:auto;
-    padding:7px 10px;
-}
-.menu li li a:hover{
-    background:#F47F20;
-}
-.menu li:hover > ul{
-    display:block;
-}
-.menu li li ul{
-    top:0;
-    left:230px;
-}
-.menu li li:hover > a{
-    background:#F47F20;
-}
+.menu                   {
+                    padding:0 0 20px;
+                    text-align:center;
+                    }
+.menu ul            {
+                        display:block;
+                        height:40px;
+                        padding:0 20px;
+                        background:#F47F20;
+                    }
+.menu li            {
+                        display:inline-block;
+                        margin:0 -2px;
+                        position:relative;
+                    }
+.menu li a             {
+                        display:block;
+                        height:20px;
+                        padding:10px 15px;
+                        line-height:20px;
+                        color:#fff;
+                        font-weight:700;
+                        text-decoration:none;
+                        /*outline:1px solid crimson;*/
+                        }
+.menu li a:hover       {
+                            background:#2C3093;
+                        }
+.menu li ul             {
+                            height:auto;
+                            background:#2C3093;
+                            display:none;
+                            position:absolute;
+                            top:40px;
+                            left:0;
+                            z-index:5;
+                            width:230px;
+                            text-align:left;
+                            font-size:90%;
+                            padding:0;
+                        }
+.menu li:hover > a      {
+                            background:#2C3093;
+                        }
+.menu li li             {
+                            display:block;
+                        }
+.menu li li a           {
+                            height:auto;
+                            padding:7px 10px;
+                        }
+.menu li li a:hover     {
+                            background:#F47F20;
+                        }
+.menu li:hover > ul     {
+                            display:block;
+                        }
+.menu li li ul          {
+                            top:0;
+                            left:230px;
+                        }
+.menu li li:hover > a      {
+                                background:#F47F20;
+                            }
