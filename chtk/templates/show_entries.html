@@ -24,7 +24,7 @@
                     <div style="clear:both;"></div>
                 {% else %}
                     <h2 align="center">{{ entry.title }} </h2><br>
-                    {{ entry.text|safe }} {% if entry.tour %}<a href="{{ entry.tour }}">ГРУППЫ И РАСПИСАНИЕ</a>{% endif %}
+                    {{ entry.text|safe }} {% if entry.tour %}<a href="/{{ entry.tour }}">ГРУППЫ И РАСПИСАНИЕ</a>{% endif %}
                 {% endif %}
       </li>
   {% else %}
