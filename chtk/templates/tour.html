@@ -3,7 +3,7 @@
 {% block body %}
 <body>
 <div class="header">
-    <div class=flash align="center">Результаты турнира {{ date  }}</div>
+    <div class=flash align="center">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</div>
             <table border="1" align="center">
                 {% for el in num_tour %}
                 <tr>

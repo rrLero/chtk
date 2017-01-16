@@ -6,7 +6,7 @@
     <div class=metanav>
 
         <div align="left"> <a href="/"> <img src="{{ url_for('static', filename='logo2.png') }}" width="150" align="middle" ></a>
-            <a href="/" class="title"><b>Черкасский Теннисный Клуб</b></a>
+            <a href="/" class="title"><b>Черкасский Теннисный Клуб</b> </a>
             {% if not session.logged_in %}
                 <a href="{{ url_for('login') }}"><input type="image" src="/static/login_button.png" width="45" align="right"></a>
             {% else %}
@@ -15,36 +15,74 @@
         </div>
     </div>
 
-  <div class=metanav>
-      <center>
-          <ul class="hr">
-              <li><form method="post" name="drop_down_box">
-                    <select name="menu" size="1" onchange="top.location=this.value">
-                        <option value="Рейтинг">Рейтинг</option>
-                        {% for i in range(2016, 2018) %}
-                        <option value="/rating/{{ i }}/"> Рейтинг {{ i }}</option>
+    <div class="menu">
+    <ul>
+        <li><a href="#">Рейтинг</a>
+            <ul>
+                {% for i in range(2016, 2018) %}
+                    <li><a href="/rating/{{ i }}/"> Рейтинг {{ i }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li><a href="#">Результаты турниров </a>
+            <ul>
+                {% for year in range(2016, 2018) %}
+                <li><a href="#">Результаты турниров {{ year }}  </a>
+                    <ul>
+                        {% if year == 2017 %}
+                        {% for i in range(1, len_2017 + 1) %}
+                            <li>
+                                <a href="/{{ year }}/{{ i }}/"> Турнир {{ i }}</a>
+                            </li>
                         {% endfor %}
-                    </select></form></li>
-              <li><form method="post" name="drop_down_box">
-                    <select name="menu" size="1" onchange="top.location=this.value">
-                        <option value="Результат турнира">Турниры 2016</option>
-                        {% for i in range(1, 21) %}
-                        <option value="/tour/{{ i }}/"> Турнир {{ i }}</option>
+                        {% endif %}
+                        {% if year == 2016 %}
+                        {% for i in range(1, len_2016+1) %}
+                            <li>
+                                <a href="/{{ year }}/{{ i }}/"> Турнир {{ i }}</a>
+                            </li>
                         {% endfor %}
-                    </select></form></li>
-              <li><form method="post" name="drop_down_box">
-                    <select name="menu" size="1" onchange="top.location=this.value">
-                        <option value="Игроки" >Игроки ЧТК 2016</option>
-                        {% for player in players %}
-                        <option value="/player/{{player.id}}/"> {{ player.player_surname }} {{ player.player_name}}</option>
-                        {% endfor %}
-                    </select></form></li>
-              <li><form action="/rules/"><input type="submit" value="Правила"></form></li>
-              <li><form action="/contacts/"><input type="submit" value="Контакты"></form></li>
-              {% if session.logged_in %}<li><form action="/admin/"><input type="submit" value="Админка"></form></li>{% endif %}
-          </ul>
-      </center>
-  </div>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li><a href="#">Игроки клуба</a>
+            <ul>
+                {% for year in range(2016, 2018) %}
+                    <li><a href="#">Игроки клуба {{ year }}</a>
+                        <ul>
+                            {% for player in players %}
+                                {% if year == 2016 %}
+                                    {% if player.player_surname in list_of_players_from_year_2016 %}
+                                    <li><a href="/player/{{ year }}/{{ player.id }}/"> {{ player.player_surname }} {{ player.player_name}}</a></li>
+                                    {% endif %}
+                                {% endif %}
+                                {% if year == 2017 %}
+                                    {% if player.player_surname in list_of_players_from_year_2017 %}
+                                    <li><a href="/player/{{ year }}/{{ player.id }}/"> {{ player.player_surname }} {{ player.player_name}}</a></li>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>
+            <a href="/rules/">Правила</a>
+        </li>
+        <li>
+            <a href="/contacts/">Контакты</a>
+        </li>
+        {% if session.logged_in %}
+        <li><a href="/admin/">Админка</a>
+        </li>
+        {% endif %}
+    </ul>
+    </div>
 
   {% block body %}{% endblock %}
 

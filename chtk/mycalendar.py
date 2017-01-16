@@ -22,6 +22,10 @@ class MyCalendar:
         19: '11.12.2016',
         20: '25.12.2016',
         }
+    list_of_tournaments_2017 = {
+        1: '15.01.2016',
+
+    }
 
     def get_date(self, n):
         if n in self.list_of_tournaments:
@@ -29,3 +33,8 @@ class MyCalendar:
         else:
             return False
 
+    def get_date_2017(self, n):
+        if n in self.list_of_tournaments_2017:
+            return self.list_of_tournaments_2017[n]
+        else:
+            return False

@@ -72,7 +72,7 @@ class MyModelView(sqla.ModelView):
 class AnalyticsView(BaseView):
     @expose('/')
     def index(self):
-        return self.render('base.html')
+        return self.render('base.html', len_2016=len_2016, len_2017=len_2017)
 
 
 def connect_db():
@@ -112,14 +112,88 @@ def close_db(error):
         g.sqlite_db.close()
 
 
+def number_of_tournaments(list_year):
+    return len(list_year[0])-2
+
+
+def rating_show(list_year):
+    new_list = {}
+    counter = 1
+    rating = {}
+    for el in list_year:
+        s = 1
+        points_1 = 0
+        while ('Турнир_' + str(s)) in el:
+            points_1 += int(el['Турнир_' + str(s)])
+            s += 1
+        rating.update({el['Фамилия'] + ' ' + el['Имя']: points_1})
+    while rating:
+        for key, el in rating.items():
+            if el == max(rating.values()):
+                new_list[counter] = {'Очки': el, 'Фамилия': key}
+                counter += 1
+                rating.pop(key)
+                break
+    return new_list
+
+
+def get_position(rating, list_year):
+    for key, el in rating_show(list_year).items():
+        if el['Очки'] == rating:
+            return key
+
+
+def get_data_players():
+    db = get_db()
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
+    players = cur_1.fetchall()
+    return players
+
+
+def show_method():
+    return render_template("base.html", number=number_of_tournaments(parsed_string), players=get_data_players())
+
+
+f = open('new_list_2.txt', 'r')
+json_string = f.readline()
+parsed_string = json.loads(json_string)
+f.close()
+
+f_2017 = open('new_list_2017.txt', 'r')
+json_string_new = f_2017.readline()
+parsed_string_new = json.loads(json_string_new)
+f_2017.close()
+
+points = Points()
+tour_result = TourResult(parsed_string)
+tour_result_2017 = TourResult(parsed_string_new)
+
+len_2016 = number_of_tournaments(parsed_string)
+len_2017 = number_of_tournaments(parsed_string_new)
+
+list_of_players_from_year_2016 = []
+list_of_players_from_year_2017 = []
+
+
+for el in rating_show(parsed_string).values():
+    if el['Очки'] != 0:
+        a, b = el['Фамилия'].split()
+        list_of_players_from_year_2016.append(a)
+
+for el in rating_show(parsed_string_new).values():
+    if el['Очки'] != 0:
+        a, b = el['Фамилия'].split()
+        list_of_players_from_year_2017.append(a)
+
+
 @app.route('/<int:page>/', methods=['GET', 'POST'])
 @app.route('/')
 def show_entries(page=1):
     pagination = Entries.query.order_by(Entries.id.desc()).paginate(page, 3, False)
     db = get_db()
-    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by id')
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
     players = cur_1.fetchall()
-    return render_template('show_entries.html', players=players, pagination=pagination)
+    return render_template('show_entries.html', players=players, pagination=pagination, len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
 @app.route('/add_photo', methods=['POST'])
@@ -138,7 +212,7 @@ def add_photo():
     db.execute("update players set path_photo = '%s' where id = '%d'" % (path_to_file, int(player_id)))
     db.commit()
     flash('New PHOTO was successfully posted')
-    return render_template('player.html', player_id=player_id, players=get_data_players())
+    return render_template('player.html', player_id=player_id, players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
 @app.route('/add', methods=['POST'])
@@ -180,7 +254,7 @@ def login():
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error)
+    return render_template('login.html', error=error, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/logout')
@@ -190,102 +264,54 @@ def logout():
     return redirect(url_for('show_entries'))
 
 
-f = open('new_list_2.txt', 'r')
-json_string = f.readline()
-parsed_string = json.loads(json_string)
-f.close()
-
-f_2017 = open('new_list_2017.txt', 'r')
-json_string_new = f_2017.readline()
-parsed_string_new = json.loads(json_string_new)
-f_2017.close()
-
-points = Points()
-tour_result = TourResult(parsed_string)
-tour_result_2017 = TourResult(parsed_string_new)
-
-
-def rating_show(list_year):
-    new_list = {}
-    counter = 1
-    rating = {}
-    for el in list_year:
-        s = 1
-        points_1 = 0
-        while ('Турнир_' + str(s)) in el:
-            points_1 += int(el['Турнир_' + str(s)])
-            s += 1
-        rating.update({el['Фамилия'] + ' ' + el['Имя']: points_1})
-    while rating:
-        for key, el in rating.items():
-            if el == max(rating.values()):
-                new_list[counter] = {'Очки': el, 'Фамилия': key}
-                counter += 1
-                rating.pop(key)
-                break
-    return new_list
-
-
-def get_position(rating, list_year):
-    for key, el in rating_show(list_year).items():
-        if el['Очки'] == rating:
-            return key
-
-
-def number_of_tournaments(list_year):
-    return len(list_year[0])-2
-
-
-def get_data_players():
-    db = get_db()
-    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by id')
-    players = cur_1.fetchall()
-    return players
-
-
-def show_method():
-    return render_template("base.html", number=number_of_tournaments(parsed_string), players=get_data_players())
-
-
 @app.route('/rating/<int:year>/')
 def show_method_1(year):
     if year == 2016:
         peremen = rating_show(parsed_string)
     elif year == 2017:
         peremen = rating_show(parsed_string_new)
-    return render_template("rating.html", peremen=peremen, players=get_data_players(), year=year)
+    return render_template("rating.html", peremen=peremen, players=get_data_players(), year=year, len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
-@app.route('/tour/<int:tour_id>/')
-def shopping(tour_id):
-    num_tour = tour_result.tour_result(tour_id)
+@app.route('/<int:year>/<int:tour_id>/')
+def shopping(tour_id, year):
+    if year == 2016:
+        num_tour = tour_result.tour_result(tour_id)
+    elif year == 2017:
+        num_tour = tour_result_2017.tour_result(tour_id)
     date = MyCalendar()
-    date = date.get_date(tour_id)
-    return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, date=date, players=get_data_players())
+    date_2016 = date.get_date(tour_id)
+    date_2017 = date.get_date_2017(tour_id)
+    return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
-@app.route('/player/<int:player_id>/')
-def player(player_id):
+@app.route('/player/<int:year>/<int:player_id>/')
+def player(player_id, year):
     db = get_db()
     name = db.execute('select player_name from players where id = %d' % player_id)
     name = name.fetchone()
     surname = db.execute('select player_surname from players where id = %d' % player_id)
     surname = surname.fetchone()
     stats = StatsPlayers()
-    list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
-    position = get_position(list_of_player[0], parsed_string)
-    list_of_player.append(position)
-    return render_template("player.html", player_id=player_id, players=get_data_players(), list_of_player=list_of_player)
+    if year == 2017:
+        list_of_player = stats.get_number_of_tours(parsed_string_new, name[0], surname[0])
+        position = get_position(list_of_player[0], parsed_string_new)
+        list_of_player.append(position)
+    elif year == 2016:
+        list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
+        position = get_position(list_of_player[0], parsed_string)
+        list_of_player.append(position)
+    return render_template("player.html", player_id=player_id, players=get_data_players(), list_of_player=list_of_player, len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
 @app.route('/rules/')
 def rules():
-    return render_template('test.html', players=get_data_players())
+    return render_template('test.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
 @app.route('/contacts/')
 def contacts():
-    return render_template('contacts.html', players=get_data_players())
+    return render_template('contacts.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
