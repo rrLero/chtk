@@ -7,9 +7,11 @@
     <ul>
         <table border="1" align="center">
         {% for key, el in peremen.items() %}
+            {% if el['Очки'] != 0 %}
             <tr>
-                {% if el['Очки'] != 0 and el['Очки'] %}<td>{{ key }}</td><td>{{ el['Фамилия'] }}</td><td>{{ el['Очки'] }}</td>{% endif %}
+                <td>{{ key }}</td><td>{{ el['Фамилия'] }}</td><td>{{ el['Очки'] }}</td>
             </tr>
+            {% endif %}
         {% endfor %}
         </table>
     </ul>
