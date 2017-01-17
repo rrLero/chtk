@@ -178,12 +178,12 @@ list_of_players_from_year_2017 = []
 for el in rating_show(parsed_string).values():
     if el['Очки'] != 0:
         a, b = el['Фамилия'].split()
-        list_of_players_from_year_2016.append(a)
+        list_of_players_from_year_2016.append(el['Фамилия'])
 
 for el in rating_show(parsed_string_new).values():
     if el['Очки'] != 0:
         a, b = el['Фамилия'].split()
-        list_of_players_from_year_2017.append(a)
+        list_of_players_from_year_2017.append(el['Фамилия'])
 
 
 @app.route('/<int:page>/', methods=['GET', 'POST'])

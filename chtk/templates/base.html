@@ -51,16 +51,18 @@
         <li><a href="#">Игроки клуба</a>
             <ul>
                 {% for year in range(2016, 2018) %}
-                    <li><a href="#">Игроки клуба {{ year }}</a>
+                    <li><a href="#">Игроки клуба {{ year }} </a>
                         <ul>
                             {% for player in players %}
                                 {% if year == 2016 %}
-                                    {% if player.player_surname in list_of_players_from_year_2016 %}
+                                    {% set x = player.player_surname +' '+ player.player_name %}
+                                    {% if x in list_of_players_from_year_2016 %}
                                     <li><a href="/player/{{ year }}/{{ player.id }}/"> {{ player.player_surname }} {{ player.player_name}}</a></li>
                                     {% endif %}
                                 {% endif %}
                                 {% if year == 2017 %}
-                                    {% if player.player_surname in list_of_players_from_year_2017 %}
+                                    {% set x = player.player_surname +' '+ player.player_name %}
+                                    {% if x in list_of_players_from_year_2017 %}
                                     <li><a href="/player/{{ year }}/{{ player.id }}/"> {{ player.player_surname }} {{ player.player_name}}</a></li>
                                     {% endif %}
                                 {% endif %}
