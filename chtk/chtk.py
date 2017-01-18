@@ -223,7 +223,10 @@ def add_entry():
         path_to_file = None
     db.execute('insert into entries (title, text, date_of_article, images, tour) values (?, ?, ?, ?, ?)',
                  [request.form['title'], request.form['text'], dt, path_to_file, path_to_file_tour])
+    db.execute('insert into tournaments (path_tour) values (?)',
+                 [path_to_file_tour])
     db.commit()
+
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
@@ -270,7 +273,10 @@ def shopping(tour_id, year):
     date = MyCalendar()
     date_2016 = date.get_date(tour_id)
     date_2017 = date.get_date_2017(tour_id)
-    return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
+    db = get_db()
+    cur = db.execute('select id, path_tour from tournaments order by id')
+    tournaments = cur.fetchall()
+    return render_template("tour.html", tournaments=tournaments, num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/player/<int:year>/<int:player_id>/')

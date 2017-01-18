@@ -4,6 +4,14 @@
 <body>
 <div class="header">
     <div class=flash align="center">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</div>
+
+    {% for tour in tournaments %}
+            {% if tour.id and tour.id == tour_id %}
+            <br>
+            <div align="center"> Детальные результаты <a href="/{{ tour.path_tour }}">СКАЧАТЬ</a></div>
+            <br>
+            {% endif %}
+            {% endfor %}
             <table border="1" align="center">
                 {% for el in num_tour %}
                 <tr>
@@ -15,6 +23,7 @@
                 </tr>
                 {% endfor %}
             </table>
+            <br>
 </div>
 </body>
 {% endblock %}
