@@ -60,6 +60,14 @@ class Players(dab.Model):
         return self.username
 
 
+class Tournaments(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    path_tour = dab.Column(dab.String(40))
+
+    def __str__(self):
+        return self.username
+
+
 class MyModelView(sqla.ModelView):
 
     def is_accessible(self):
@@ -311,6 +319,8 @@ def contacts():
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
 admin.add_view(MyModelView(Entries, dab.session))
 admin.add_view(MyModelView(Players, dab.session))
+admin.add_view(MyModelView(Tournaments, dab.session))
+
 admin.add_view(AnalyticsView(name='BasePage', endpoint='analytics'))
 
 if __name__ == '__main__':
