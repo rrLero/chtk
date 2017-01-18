@@ -20,7 +20,7 @@
       <li><div class="date" align="right"> {{ entry.date_of_article }}</div>
 
                 {% if entry.images %}
-                    <img src="/{{ entry.images }}" width="200" align="right" class="picture"><h2 align="center">{{ entry.title }} </h2><br>{{ entry.text|safe }} {% if entry.tour %}<a href="{{ entry.tour }}">ФАЙЛЫ ДЛЯ СКАЧКИ</a>{% endif %}
+                    <img src="/{{ entry.images }}" width="200" align="right" class="picture"><h2 align="center">{{ entry.title }} </h2><br>{{ entry.text|safe }} {% if entry.tour %}<a href="/{{ entry.tour }}">ФАЙЛЫ ДЛЯ СКАЧКИ</a>{% endif %}
                     <div style="clear:both;"></div>
                 {% else %}
                     <h2 align="center">{{ entry.title }} </h2><br>
