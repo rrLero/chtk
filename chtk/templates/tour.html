@@ -7,7 +7,11 @@
             <table border="1" align="center">
                 {% for el in num_tour %}
                 <tr>
-                <td> {{el[1][0]}} {{ el[1][1] }} </td><td> {{ el[0] }} </td>
+                    {% for player in players %}
+                    {% if player.player_surname == el[1][0] and player.player_name == el[1][1] %}
+                    <td> <a href="/player/{{ year }}/{{ player.id }}/">{{el[1][0]}} {{ el[1][1] }}</a></td><td> {{ el[0] }} </td>
+                    {% endif %}
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </table>
