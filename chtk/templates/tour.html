@@ -6,7 +6,7 @@
     <div class=flash align="center">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</div>
 
     {% for tour in tournaments %}
-            {% if tour.id and tour.id == tour_id %}
+            {% if tour.id and year == 2017 and tour.id == tour_id %}
             <br>
             <div align="center"> Детальные результаты <a href="/{{ tour.path_tour }}">СКАЧАТЬ</a></div>
             <br>
