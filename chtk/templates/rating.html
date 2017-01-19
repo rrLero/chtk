@@ -3,8 +3,7 @@
   {% block body %}
 <body>
 <div class="header">
-    <div class=flash align="center">Парный рейтинг {{year}}</div>
-    <ul>
+    <div class=flash align="center"><h2>Парный рейтинг {{year}}</h2></div>
         <table border="1" align="center">
         {% for key, el in peremen.items() %}
             {% if el['Очки'] != 0 %}
@@ -19,7 +18,7 @@
             {% endif %}
         {% endfor %}
         </table>
-    </ul>
+
 </div>
 </body>
 {% endblock %}
