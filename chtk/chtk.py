@@ -281,9 +281,10 @@ def shopping(tour_id, year):
     date = MyCalendar()
     date_2016 = date.get_date(tour_id)
     date_2017 = date.get_date_2017(tour_id)
-    db = get_db()
-    cur = db.execute('select id, path_tour from tournaments order by id')
-    tournaments = cur.fetchall()
+    # db = get_db()
+    # cur = db.execute('select id, path_tour from tournaments order by id')
+    # tournaments = cur.fetchall()
+    tournaments = Tournaments.query
     return render_template("tour.html", tournaments=tournaments, num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
