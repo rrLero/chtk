@@ -221,6 +221,8 @@ def add_entry():
         filename_tour = secure_filename(tour.filename)
         path_to_file_tour = os.path.join(app.config['UPLOAD_FOLDER_TOUR'], filename_tour)
         tour.save(os.path.join(app.config['UPLOAD_FOLDER_TOUR'], filename_tour))
+        db.execute('insert into tournaments (path_tour) values (?)',
+                   [path_to_file_tour])
     else:
         path_to_file_tour = None
     if file:
@@ -231,8 +233,6 @@ def add_entry():
         path_to_file = None
     db.execute('insert into entries (title, text, date_of_article, images, tour) values (?, ?, ?, ?, ?)',
                  [request.form['title'], request.form['text'], dt, path_to_file, path_to_file_tour])
-    db.execute('insert into tournaments (path_tour) values (?)',
-                 [path_to_file_tour])
     db.commit()
 
     flash('New entry was successfully posted')
