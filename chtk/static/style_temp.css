@@ -80,7 +80,7 @@ h2 {
 .metanav {
   padding: 0.4em;
   margin-bottom: 0.5em;
-  background: url(image/background.jpg) no-repeat center center fixed;
+  background: url(background.jpg) no-repeat center center fixed;
   height: 240px;
   background-size: cover;
 }

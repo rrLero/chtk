@@ -1,20 +1,27 @@
 <!doctype html>
-
-<title>ЧТК</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_temp.css') }}">
-<div class=page>
-    <div class=metanav>
-
-        <div align="left"> <a href="/"> <img src="{{ url_for('static', filename='logo2.png') }}" width="150" align="middle" ></a>
-            <a href="/" class="title"><b>Черкасский Теннисный Клуб</b> </a>
-            {% if not session.logged_in %}
-                <a href="{{ url_for('login') }}"><input type="image" src="/static/login_button.png" width="45" align="right"></a>
-            {% else %}
-                <a href="{{ url_for('logout') }}"><input type="image" src="/static/logout_button.png" width="45" align="right"></a>
-            {% endif %}
+<html>
+	<head>
+    <title>ЧТК</title>
+    <meta charset="utf-8">
+    <meta description="#" keywords="#">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_temp.css') }}">
+  </head>
+  <body>
+    <div class="page">
+			<header>
+			  <div class="metanav">
+            <div class="login">
+                {% if not session.logged_in %}
+                <a href="{{ url_for('login') }}">Вход</a>
+                {% else %}
+                <a href="{{ url_for('logout') }}">Выход</a>
+                {% endif %}
+            </div>
+            <div class="logo" align="left">
+							<a href="/"> <img src="{{ url_for('static', filename='logo2_copy.png') }}" width="150" align="middle" ></a>
+              <a href="/" class="title"><b>Черкасский Теннисный Клуб</b> </a>
+						</div>
         </div>
-    </div>
-
     <div class="menu">
     <ul>
         <li><a href="#">Рейтинг</a>
@@ -60,10 +67,12 @@
         {% endif %}
     </ul>
     </div>
-
+            </header>
   {% block body %}{% endblock %}
 
 
 <div class="footer"><h2 align="center">Черкасский Теннисный Клуб</h2><hr>
 <div align="center"> Дизайнер и программист - <b>Левченко Роман</b></div></div>
 </div>
+  </body>
+</html>
