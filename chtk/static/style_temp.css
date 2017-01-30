@@ -288,3 +288,57 @@ width: 180px
   margin-left: 240px;
   margin-top: 15px;
 }
+table {
+  margin: 10px 5px 10px 45px;
+  padding: 7px;
+  /*border: 1px solid grey;*/
+  text-decoration: none;
+  border-collapse: collapse;
+}
+th {
+  font-size: 1.2em;
+}
+tr th {
+  text-align: center;
+  /*background: lightgreen;*/
+  border-bottom: 1px solid grey;
+
+}
+tr {
+  height: 30px;
+
+
+}
+td {
+
+}
+td a {
+  text-decoration: none;
+}
+.td-position {
+  width: 40px;
+  text-align: right;
+  padding-right: 12px;
+}
+.td-player {
+  width: 320px;
+  text-align: left;
+  /*padding-right: 12px;*/
+}
+.td-rating {
+  width: 65px;
+  text-align: center;;
+  /*padding-right: 12px;*/
+}
+tr:nth-child(even) {
+  background: rgba(217, 241, 140, 0.68);
+}
+tbody tr:hover {
+    color: white;
+    background: #729219;
+    font-size: 1.1em;
+}
+tr:hover a {
+    color: white;
+    font-size: 1.1em;
+}
