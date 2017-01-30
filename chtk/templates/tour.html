@@ -1,29 +1,39 @@
 {% extends "base.html" %}
 
 {% block body %}
-<body>
-<div class="header">
-    <div class=flash align="center">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</div>
+<div class="banner">
+</div>
+    <main>
+    <div class="col-left">
+        <section>
 
-    {% for tour in tournaments %}
+<h2 class="entres-h2">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</h2>
+            <div>
+            {% for tour in tournaments %}
             {% if tour.id and year == 2017 and tour.id == tour_id %}
-            <br>
-            <div align="center"> Детальные результаты <a href="/{{ tour.path_tour }}">СКАЧАТЬ</a></div>
-            <br>
+            <h2 class="entres-h2"><a href="/{{ tour.path_tour }}">СКАЧАТЬ</a></h2>
             {% endif %}
             {% endfor %}
-            <table border="1" align="center">
+        <table>
+            <thead>
+            <tr>
+                <th>Игрок</th>
+                <th>Балы</th>
+            </tr>
+            </thead>
+            <tbody>
                 {% for el in num_tour %}
                 <tr>
                     {% for player in players %}
                     {% if player.player_surname == el[1][0] and player.player_name == el[1][1] %}
-                    <td> <a href="/player/{{ year }}/{{ player.id }}/">{{el[1][0]}} {{ el[1][1] }}</a></td><td> {{ el[0] }} </td>
+                    <td class="td-player"><a href="/player/{{ year }}/{{ player.id }}/">{{el[1][0]}} {{ el[1][1] }}</a></td><td class="td-rating">{{ el[0] }} </td>
                     {% endif %}
                     {% endfor %}
                 </tr>
                 {% endfor %}
-            </table>
-            <br>
-</div>
-</body>
+            </tbody>
+        </table>
+            </div>
+        </section>
+
 {% endblock %}

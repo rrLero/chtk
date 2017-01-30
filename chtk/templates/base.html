@@ -24,7 +24,7 @@
         </div>
     <div class="menu">
     <ul>
-        <li><a href="#">Рейтинг</a>
+        <li class="active"><a href="#">Рейтинг</a>
             <ul>
                 {% for i in range(2016, 2018) %}
                     <li><a href="/rating/{{ i }}/"> Рейтинг {{ i }}</a></li>
@@ -34,7 +34,7 @@
         <li><a href="#">Результаты турниров </a>
             <ul>
                 {% for year in range(2016, 2018) %}
-                <li><a href="#">Результаты турниров {{ year }}  </a>
+                <li class="parent"><a href="#">Результаты турниров {{ year }}  </a>
                     <ul>
                         {% if year == 2017 %}
                         {% for i in range(1, len_2017 + 1) %}
