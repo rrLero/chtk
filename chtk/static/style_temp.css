@@ -29,7 +29,7 @@ main::after {
 }
 .col-right {
   width: 34%;
-  min-height: 500px;
+  min-height: 700px;
   margin-top: 13px;
   float: right;
   border: 1px lightgrey solid;
@@ -262,7 +262,7 @@ margin: 0 0 0 20px;
 width: 180px
 }
 .adv-1 {
-  margin: 10px 7px 35px;
+  margin: 10px 7px 65px;
   height: 100px;
 
 
