@@ -12,13 +12,14 @@
 			  <div class="metanav">
             <div class="login">
                 {% if not session.logged_in %}
-                <a href="{{ url_for('login') }}">Вход</a>
+                <a href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='login_button.png') }}" width="60"></a>
                 {% else %}
-                <a href="{{ url_for('logout') }}">Выход</a>
+                <a href="{{ url_for('logout') }}"><img src="{{ url_for('static', filename='logout_button.png') }}" width="60"></a>
                 {% endif %}
+
             </div>
             <div class="logo" align="left">
-							<a href="/"> <img src="{{ url_for('static', filename='logo2_copy.png') }}" width="150" align="middle" ></a>
+							<a href="/"> <img src="{{ url_for('static', filename='logo2_copy.png') }}" width="170" align="middle" ></a>
               <a href="/" class="title"><b>Черкасский Теннисный Клуб</b> </a>
 						</div>
         </div>
