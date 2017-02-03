@@ -26,8 +26,8 @@ app.config.update(dict(
     UPLOAD_FOLDER_PLAYERS='static/players/',
     DATABASE=os.path.join(app.root_path, 'chtk.db'),
     SECRET_KEY='development key',
-    USERNAME='admin',
-    PASSWORD='default',
+    USERNAME='rrlero',
+    PASSWORD='rrlero',
     SQLALCHEMY_ECHO=True,
     SQLALCHEMY_TRACK_MODIFICATIONS=False
 
