@@ -317,6 +317,12 @@ def contacts():
     return render_template('contacts.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
+@app.route('/sitemap.xml')
+def sitemap():
+    return render_template('sitemap.xml')
+
+
+
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
 admin.add_view(MyModelView(Entries, dab.session))
 admin.add_view(MyModelView(Players, dab.session))
