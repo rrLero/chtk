@@ -10,7 +10,9 @@
 <h2 class="entres-h2">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</h2>
             <div>
             {% for tour in tournaments %}
-            {% if tour.id and year == 2017 and tour.id == tour_id %}
+
+            {% if tour.path_tour and year == 2017 and 'static/tours/tournament_%s.xls' %tour_id == tour.path_tour %}
+
             <h2 class="entres-h2"><a href="/{{ tour.path_tour }}">СКАЧАТЬ</a></h2>
             {% endif %}
             {% endfor %}
