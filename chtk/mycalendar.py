@@ -24,6 +24,7 @@ class MyCalendar:
         }
     list_of_tournaments_2017 = {
         1: '15.01.2017',
+        2: '05.02.2017',
 
     }
 
