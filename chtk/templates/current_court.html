@@ -2,13 +2,14 @@
 {% block body %}
 
 
-  <ul class=entries>
+
     {% for cour in court %}
-      <li>
+    <ul class=entries>
         {% if current_court == cour.name %}
+        <li>
                 {% if cour.path_hoto %}
-                    <h2 class="entres-h2">{{ cour.name }} </h2>
-                    <img src="/static/files/{{ cour.path_hoto }}" width="500" align="right" class="picture"><p>
+            <h2 class="entres-h2">{{ cour.name }} </h2>
+            <img src="/static/files/{{ cour.path_hoto }}" width="500" align="right" class="picture"><p>
         <table border="3">
             <thead>
             <tr>
@@ -18,7 +19,7 @@
                 <th>Описание</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody style="background-color: green; color:white;">
             <tr>
                 <td>{{ cour.adress }}</td>
                 <td>{{ cour.phones }}</td>
@@ -27,9 +28,10 @@
             </tr>
             </tbody>
       </table>
+                    <div style="clear:both;"></div>
                 {% else %}
                     <h2 class="entres-h2">{{ cour.name }} </h2><br>
-        <table border="3">
+        <table style="/static/style.css" border="3">
             <thead>
             <tr>
                 <th>Адресс</th>
@@ -47,14 +49,12 @@
             </tr>
             </tbody>
       </table>
-                {% endif %}
-          {% endif %}
+            <div style="clear:both;"></div>
+            {% endif %}
+
       </li>
-  </ul>
+      {% endif %}
+</ul>
     {% endfor %}
-
-
-
-
 
 {% endblock %}
