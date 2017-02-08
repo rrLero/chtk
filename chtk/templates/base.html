@@ -68,6 +68,14 @@
             </ul>
         </li>
         <li>
+            <a href="#">Корты Черкасс</a>
+            <ul>
+                {% for cour in court %}
+                <li><a href="/courts/{{ cour.name }}">{{ cour.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>
             <a href="/rules/">Правила</a>
         </li>
         <li>

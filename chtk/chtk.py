@@ -264,6 +264,10 @@ def show_method():
     return render_template("base.html", number=number_of_tournaments(parsed_string), players=get_data_players())
 
 
+def get_court():
+    court = Courts.query.order_by(Courts.id.desc())
+    return court
+
 f = open('new_list_2.txt', 'r')
 json_string = f.readline()
 parsed_string = json.loads(json_string)
@@ -289,7 +293,7 @@ def show_entries(page=1):
     db = get_db()
     cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
     players = cur_1.fetchall()
-    return render_template('show_entries.html', players=players, pagination=pagination, len_2016=len_2016, len_2017=len_2017)
+    return render_template('show_entries.html', court=get_court(), players=players, pagination=pagination, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/add_photo', methods=['POST'])
@@ -308,7 +312,7 @@ def add_photo():
     db.execute("update players set path_photo = '%s' where id = '%d'" % (path_to_file, int(player_id)))
     db.commit()
     flash('New PHOTO was successfully posted')
-    return render_template('player.html', player_id=player_id, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
+    return render_template('player.html', player_id=player_id, court=get_court(), players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/add', methods=['POST'])
@@ -353,7 +357,7 @@ def login():
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error, len_2016=len_2016, len_2017=len_2017)
+    return render_template('login.html', error=error, len_2016=len_2016, len_2017=len_2017, court=get_court(),)
 
 
 @app.route('/logout')
@@ -371,7 +375,7 @@ def show_method_1(year):
     elif year == 2017:
         peremen = rating_show(parsed_string_new)
         year = 2017
-    return render_template("rating.html", peremen=peremen, players=get_data_players(), year=year, len_2016=len_2016, len_2017=len_2017)
+    return render_template("rating.html", peremen=peremen, court=get_court(), players=get_data_players(), year=year, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/<int:year>/<int:tour_id>/')
@@ -387,7 +391,7 @@ def shopping(tour_id, year):
     # cur = db.execute('select id, path_tour from tournaments order by id')
     # tournaments = cur.fetchall()
     tournaments = Tournaments.query
-    return render_template("tour.html", tournaments=tournaments, num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
+    return render_template("tour.html", tournaments=tournaments, court=get_court(), num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/player/<int:year>/<int:player_id>/')
@@ -406,23 +410,28 @@ def player(player_id, year):
         list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
         position = get_position(list_of_player[0], parsed_string)
         list_of_player.append(position)
-    return render_template("player.html", player_id=player_id, players=get_data_players(), list_of_player=list_of_player, len_2016=len_2016, len_2017=len_2017)
+    return render_template("player.html", player_id=player_id, players=get_data_players(), court=get_court(), list_of_player=list_of_player, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/rules/')
 def rules():
-    return render_template('test.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
+    return render_template('test.html', players=get_data_players(), court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/contacts/')
 def contacts():
-    return render_template('contacts.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
+    return render_template('contacts.html', players=get_data_players(), court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
-@app.route('/courts/')
-def courts():
-    court = Courts.query.order_by(Courts.id.desc())
-    return render_template('courts.html', court=court, len_2016=len_2016, len_2017=len_2017)
+# @app.route('/courts/')
+# def courts():
+#     court = Courts.query.order_by(Courts.id.desc())
+#     return render_template('courts.html', court=court, len_2016=len_2016, len_2017=len_2017)
+
+
+@app.route('/courts/<current_court>/')
+def current_courts(current_court):
+    return render_template('current_court.html', current_court=current_court, court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
