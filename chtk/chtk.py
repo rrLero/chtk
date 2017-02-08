@@ -6,6 +6,7 @@ from tour_result import TourResult
 from mycalendar import MyCalendar
 import json
 import os
+import os.path as op
 import sqlite3
 import time
 from werkzeug import secure_filename
@@ -13,7 +14,9 @@ from StatsPlayers import StatsPlayers
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib import sqla
-from flask_admin import BaseView, expose
+from flask_admin import BaseView, expose, form
+from jinja2 import Markup
+from sqlalchemy.event import listens_for
 
 
 app = Flask(__name__)
@@ -36,6 +39,69 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + app.config['DATABASE']
 app.config.from_envvar('CHTK_SETTINGS', silent=True)
 
 dab = SQLAlchemy(app)
+
+
+file_path = op.join(op.dirname(__file__), 'static/files')
+try:
+    os.mkdir(file_path)
+except OSError:
+    pass
+
+
+class File(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.Unicode(64))
+    path = dab.Column(dab.Unicode(128))
+
+    def __unicode__(self):
+        return self.name
+
+
+class Image(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.Unicode(64))
+    path = dab.Column(dab.Unicode(128))
+
+    def __str__(self):
+        return self.path
+
+
+class Courts(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.String(100))
+    adress = dab.Column(dab.String(450))
+    phones = dab.Column(dab.String(60))
+    type = dab.Column(dab.String(20))
+    description = dab.Column(dab.String(240))
+    path_hoto = dab.Column(dab.Integer, dab.ForeignKey('image.path'))
+    path_photo_ = dab.relationship(Image, backref='image')
+
+
+@listens_for(File, 'after_delete')
+def del_file(mapper, connection, target):
+    if target.path:
+        try:
+            os.remove(op.join(file_path, target.path))
+        except OSError:
+            # Don't care if was not deleted because it does not exist
+            pass
+
+
+@listens_for(Image, 'after_delete')
+def del_image(mapper, connection, target):
+    if target.path:
+        # Delete image
+        try:
+            os.remove(op.join(file_path, target.path))
+        except OSError:
+            pass
+
+        # Delete thumbnail
+        try:
+            os.remove(op.join(file_path,
+                              form.thumbgen_filename(target.path)))
+        except OSError:
+            pass
 
 
 class Entries(dab.Model):
@@ -75,6 +141,42 @@ class MyModelView(sqla.ModelView):
             return False
         else:
             return True
+
+
+class ImageView(sqla.ModelView):
+    def _list_thumbnail(view, context, model, name):
+        if not model.path:
+            return ''
+
+        return Markup('<img src="/static/files/%s">' % form.thumbgen_filename(model.path))
+
+    column_formatters = {
+        'path': _list_thumbnail
+    }
+
+    # Alternative way to contribute field is to override it completely.
+    # In this case, Flask-Admin won't attempt to merge various parameters for the field.
+    form_extra_fields = {
+        'path': form.ImageUploadField('Image',
+                                      base_path=file_path,
+                                      thumbnail_size=(100, 100, True))
+    }
+
+
+class FileView(sqla.ModelView):
+    # Override form field to use Flask-Admin FileUploadField
+    form_overrides = {
+        'path': form.FileUploadField
+    }
+
+    # Pass additional parameters to 'path' to FileUploadField constructor
+    form_args = {
+        'path': {
+            'label': 'File',
+            'base_path': file_path,
+            'allow_overwrite': False
+        }
+            }
 
 
 class AnalyticsView(BaseView):
@@ -317,17 +419,19 @@ def contacts():
     return render_template('contacts.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
-@app.route('/sitemap.xml')
-def sitemap():
-    return render_template('sitemap.xml')
-
+@app.route('/courts/')
+def courts():
+    court = Courts.query.order_by(Courts.id.desc())
+    return render_template('courts.html', court=court, len_2016=len_2016, len_2017=len_2017)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
 admin.add_view(MyModelView(Entries, dab.session))
 admin.add_view(MyModelView(Players, dab.session))
 admin.add_view(MyModelView(Tournaments, dab.session))
-
+admin.add_view(ImageView(Image, dab.session))
+admin.add_view(FileView(File, dab.session))
+admin.add_view(MyModelView(Courts, dab.session))
 admin.add_view(AnalyticsView(name='BasePage', endpoint='analytics'))
 
 if __name__ == '__main__':
