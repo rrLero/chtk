@@ -71,7 +71,7 @@ class Courts(dab.Model):
     name = dab.Column(dab.String(100))
     adress = dab.Column(dab.String(450))
     phones = dab.Column(dab.String(60))
-    type = dab.Column(dab.String(20))
+    type = dab.Column(dab.String(60))
     description = dab.Column(dab.String(240))
     path_hoto = dab.Column(dab.Integer, dab.ForeignKey('image.path'))
     path_photo_ = dab.relationship(Image, backref='image')
