@@ -433,15 +433,21 @@ def contacts():
     return render_template('contacts.html', players=get_data_players(), court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
-# @app.route('/courts/')
-# def courts():
-#     court = Courts.query.order_by(Courts.id.desc())
-#     return render_template('courts.html', court=court, len_2016=len_2016, len_2017=len_2017)
+@app.route('/coaches/')
+def coaches():
+    coach = Coaches.query.order_by(Coaches.id.desc())
+    return render_template('coaches.html', coach=coach, court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/courts/<current_court>/')
 def current_courts(current_court):
     return render_template('current_court.html', current_court=current_court, court=get_court(), len_2016=len_2016, len_2017=len_2017)
+
+
+@app.route('/coaches/<current_coach>/')
+def current_coach_(current_coach):
+    coach = Coaches.query.order_by(Coaches.id.desc())
+    return render_template('current_coach.html', coach=coach, current_coach=current_coach, court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')

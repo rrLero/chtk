@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<ol class="rounded">
+  {% for coac in coach %}
+  <li><a href="{{ coac.name }}{{ coac.surname }}">{{ coac.name }} {{ coac.surname }}</a></li>
+  {% endfor %}
+</ol>
+
+
+
+{% endblock %}
