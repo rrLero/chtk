@@ -334,6 +334,12 @@ td a {
   text-align: center;;
   /*padding-right: 12px;*/
 }
+.td-court {
+  text-align: center;;
+  padding: 12px 12px 12px 12px;
+}
+
+
 tr:nth-child(even) {
   background: rgba(217, 241, 140, 0.68);
 }
