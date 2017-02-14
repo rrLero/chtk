@@ -63,7 +63,7 @@ class Image(dab.Model):
     path = dab.Column(dab.Unicode(128))
 
     def __str__(self):
-        return self.path
+        return self.name
 
 
 class Courts(dab.Model):
@@ -74,7 +74,17 @@ class Courts(dab.Model):
     type = dab.Column(dab.String(60))
     description = dab.Column(dab.String(240))
     path_hoto = dab.Column(dab.Integer, dab.ForeignKey('image.path'))
-    path_photo_ = dab.relationship(Image, backref='image')
+    path_photo_ = dab.relationship(Image, backref='image_courts')
+
+
+class Coaches(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.String(40))
+    surname = dab.Column(dab.String(40))
+    phones = dab.Column(dab.String(40))
+    description = dab.Column(dab.String(240))
+    path_photo = dab.Column(dab.Integer, dab.ForeignKey('image.path'))
+    path_photo_ = dab.relationship(Image, backref='image_coaches')
 
 
 @listens_for(File, 'after_delete')
@@ -441,6 +451,7 @@ admin.add_view(MyModelView(Tournaments, dab.session))
 admin.add_view(ImageView(Image, dab.session))
 admin.add_view(FileView(File, dab.session))
 admin.add_view(MyModelView(Courts, dab.session))
+admin.add_view(MyModelView(Coaches, dab.session))
 admin.add_view(AnalyticsView(name='BasePage', endpoint='analytics'))
 
 if __name__ == '__main__':
