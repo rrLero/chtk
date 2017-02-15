@@ -362,17 +362,18 @@ tr:hover a {
         }
 .rounded a {
             position: relative;
-            display: block;
+            display: inline-block;
             padding: .4em .4em .4em 2em;
             margin: .5em 0 0 2em;
-            background: #DAD2CA;
-            color: #444;
+            background: green;
+
+            color: white;
             text-decoration: none;
             border-radius: .3em;
             transition: .3s ease-out;
             }
 .rounded a:hover {
-                    background: #E9E4E0;
+                  background: rgba(217, 241, 140, 0.68);
                     }
 .rounded a:hover:before {
                         transform: rotate(360deg);
@@ -384,7 +385,7 @@ tr:hover a {
                     left: -1.3em;
                     top: 50%;
                     margin-top: -1.3em;
-                    background: #8FD4C1;
+                    background: #729219;
                     height: 2em;
                     width: 2em;
                     line-height: 2em;
