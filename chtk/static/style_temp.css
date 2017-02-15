@@ -351,6 +351,12 @@ td a {
   width: 140px;
 }
 
+.td-description {
+  text-align: center;;
+  padding: 12px 12px 12px 12px;
+  width: 220px;
+}
+
 
 tr:nth-child(even) {
   background: rgba(217, 241, 140, 0.68);
