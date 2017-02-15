@@ -131,6 +131,13 @@ ul.hr li {
   text-align: left;
   float: left;
 }
+.picture_right {
+  margin: 0px 0px 0px 0px; /* Отступы вокруг картинки */
+  text-align: left;
+  float: left;
+}
+
+
 .rules {
   margin: 0px 40px ; /* Отступы вокруг текста */
 }

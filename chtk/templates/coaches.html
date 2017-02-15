@@ -1,34 +1,33 @@
 {% extends "base.html" %}
 {% block body %}
-
-    {% for coac in coach %}
     <ul class=entries>
-
         <li>
-            <h2 class="entres-h2">{{ coac.name }} {{ coac.surname }} </h2>
-            {% if coac.path_photo %}
-            <img src="/static/files/{{ coac.path_photo }}" width="200" align="right" class="picture"><p>
-            {% endif %}
-        <table border="3">
+        <table border="3" class="table_coaches">
             <thead>
             <tr>
+                <th>Фото</th>
                 <th>ФИО</th>
                 <th>Телефоны</th>
                 <th>Описание</th>
             </tr>
             </thead>
-            <tbody style="background-color: green; color:white;">
+            <tbody>
+            {% for coac in coach %}
             <tr>
+
+                {% if coac.path_photo %}
+                <td class="td-picture"><img src="/static/files/{{ coac.path_photo }}" width="200" class="picture_right"></td>
+                {% else %}
+                <td class="td-picture"><img src="/static/players/no_photo.jpg" width="200" class="picture_right"></td>
+                {% endif %}
                 <td class="td-court">{{ coac.name }} {{ coac.surname }}</td>
                 <td class="td-court">{{ coac.phones }}</td>
                 <td class="td-court">{{ coac.description}}</td>
             </tr>
+            {% endfor %}
             </tbody>
       </table>
                     <div style="clear:both;"></div>
       </li>
-
 </ul>
-    {% endfor %}
-
 {% endblock %}
