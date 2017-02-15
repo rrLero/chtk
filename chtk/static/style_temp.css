@@ -345,6 +345,11 @@ td a {
   text-align: center;;
   padding: 12px 12px 12px 12px;
 }
+.td-phone {
+  text-align: center;;
+  padding: 12px 12px 12px 12px;
+  width: 140px;
+}
 
 
 tr:nth-child(even) {
