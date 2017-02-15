@@ -2,19 +2,13 @@
 {% block body %}
     <ul class=entries>
         <li>
-        <table border="3" class="table_coaches">
+        <table border="0" class="table_coaches">
             <thead>
-            <tr>
-                <th>Фото</th>
-                <th>ФИО</th>
-                <th>Телефоны</th>
-                <th>Описание</th>
-            </tr>
+
             </thead>
             <tbody>
             {% for coac in coach %}
             <tr>
-
                 {% if coac.path_photo %}
                 <td class="td-picture"><img src="/static/files/{{ coac.path_photo }}" width="200" class="picture_right"></td>
                 {% else %}
