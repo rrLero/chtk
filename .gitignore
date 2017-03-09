@@ -47,3 +47,4 @@ fabric.properties
 /ubuntu-yakkety-16.10-cloudimg-console.log
 /.eggs/
 /chtk.egg-info/
+/chtk/chtk.db

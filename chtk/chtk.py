@@ -6,6 +6,7 @@ from tour_result import TourResult
 from mycalendar import MyCalendar
 import json
 import os
+import os.path as op
 import sqlite3
 import time
 from werkzeug import secure_filename
@@ -13,7 +14,9 @@ from StatsPlayers import StatsPlayers
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib import sqla
-from flask_admin import BaseView, expose
+from flask_admin import BaseView, expose, form
+from jinja2 import Markup
+from sqlalchemy.event import listens_for
 
 
 app = Flask(__name__)
@@ -26,8 +29,8 @@ app.config.update(dict(
     UPLOAD_FOLDER_PLAYERS='static/players/',
     DATABASE=os.path.join(app.root_path, 'chtk.db'),
     SECRET_KEY='development key',
-    USERNAME='admin',
-    PASSWORD='default',
+    USERNAME='rrlero',
+    PASSWORD='rrlero',
     SQLALCHEMY_ECHO=True,
     SQLALCHEMY_TRACK_MODIFICATIONS=False
 
@@ -36,6 +39,79 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + app.config['DATABASE']
 app.config.from_envvar('CHTK_SETTINGS', silent=True)
 
 dab = SQLAlchemy(app)
+
+
+file_path = op.join(op.dirname(__file__), 'static/files')
+try:
+    os.mkdir(file_path)
+except OSError:
+    pass
+
+
+class File(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.Unicode(64))
+    path = dab.Column(dab.Unicode(128))
+
+    def __unicode__(self):
+        return self.name
+
+
+class Image(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.Unicode(64))
+    path = dab.Column(dab.Unicode(128))
+
+    def __str__(self):
+        return self.name
+
+
+class Courts(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.String(100))
+    adress = dab.Column(dab.String(450))
+    phones = dab.Column(dab.String(60))
+    type = dab.Column(dab.String(60))
+    description = dab.Column(dab.String(240))
+    path_hoto = dab.Column(dab.Integer, dab.ForeignKey('image.path'))
+    path_photo_ = dab.relationship(Image, backref='image_courts')
+
+
+class Coaches(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    name = dab.Column(dab.String(40))
+    surname = dab.Column(dab.String(40))
+    phones = dab.Column(dab.String(40))
+    description = dab.Column(dab.String(240))
+    path_photo = dab.Column(dab.Integer, dab.ForeignKey('image.path'))
+    path_photo_ = dab.relationship(Image, backref='image_coaches')
+
+
+@listens_for(File, 'after_delete')
+def del_file(mapper, connection, target):
+    if target.path:
+        try:
+            os.remove(op.join(file_path, target.path))
+        except OSError:
+            # Don't care if was not deleted because it does not exist
+            pass
+
+
+@listens_for(Image, 'after_delete')
+def del_image(mapper, connection, target):
+    if target.path:
+        # Delete image
+        try:
+            os.remove(op.join(file_path, target.path))
+        except OSError:
+            pass
+
+        # Delete thumbnail
+        try:
+            os.remove(op.join(file_path,
+                              form.thumbgen_filename(target.path)))
+        except OSError:
+            pass
 
 
 class Entries(dab.Model):
@@ -60,6 +136,14 @@ class Players(dab.Model):
         return self.username
 
 
+class Tournaments(dab.Model):
+    id = dab.Column(dab.Integer, primary_key=True)
+    path_tour = dab.Column(dab.String(40))
+
+    def __str__(self):
+        return self.username
+
+
 class MyModelView(sqla.ModelView):
 
     def is_accessible(self):
@@ -67,6 +151,42 @@ class MyModelView(sqla.ModelView):
             return False
         else:
             return True
+
+
+class ImageView(sqla.ModelView):
+    def _list_thumbnail(view, context, model, name):
+        if not model.path:
+            return ''
+
+        return Markup('<img src="/static/files/%s">' % form.thumbgen_filename(model.path))
+
+    column_formatters = {
+        'path': _list_thumbnail
+    }
+
+    # Alternative way to contribute field is to override it completely.
+    # In this case, Flask-Admin won't attempt to merge various parameters for the field.
+    form_extra_fields = {
+        'path': form.ImageUploadField('Image',
+                                      base_path=file_path,
+                                      thumbnail_size=(100, 100, True))
+    }
+
+
+class FileView(sqla.ModelView):
+    # Override form field to use Flask-Admin FileUploadField
+    form_overrides = {
+        'path': form.FileUploadField
+    }
+
+    # Pass additional parameters to 'path' to FileUploadField constructor
+    form_args = {
+        'path': {
+            'label': 'File',
+            'base_path': file_path,
+            'allow_overwrite': False
+        }
+            }
 
 
 class AnalyticsView(BaseView):
@@ -154,6 +274,10 @@ def show_method():
     return render_template("base.html", number=number_of_tournaments(parsed_string), players=get_data_players())
 
 
+def get_court():
+    court = Courts.query.order_by(Courts.id.desc())
+    return court
+
 f = open('new_list_2.txt', 'r')
 json_string = f.readline()
 parsed_string = json.loads(json_string)
@@ -171,20 +295,6 @@ tour_result_2017 = TourResult(parsed_string_new)
 len_2016 = number_of_tournaments(parsed_string)
 len_2017 = number_of_tournaments(parsed_string_new)
 
-list_of_players_from_year_2016 = []
-list_of_players_from_year_2017 = []
-
-
-for el in rating_show(parsed_string).values():
-    if el['Очки'] != 0:
-        a, b = el['Фамилия'].split()
-        list_of_players_from_year_2016.append(el['Фамилия'])
-
-for el in rating_show(parsed_string_new).values():
-    if el['Очки'] != 0:
-        a, b = el['Фамилия'].split()
-        list_of_players_from_year_2017.append(el['Фамилия'])
-
 
 @app.route('/<int:page>/', methods=['GET', 'POST'])
 @app.route('/')
@@ -193,7 +303,7 @@ def show_entries(page=1):
     db = get_db()
     cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
     players = cur_1.fetchall()
-    return render_template('show_entries.html', players=players, pagination=pagination, len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+    return render_template('show_entries.html', court=get_court(), players=players, pagination=pagination, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/add_photo', methods=['POST'])
@@ -212,7 +322,7 @@ def add_photo():
     db.execute("update players set path_photo = '%s' where id = '%d'" % (path_to_file, int(player_id)))
     db.commit()
     flash('New PHOTO was successfully posted')
-    return render_template('player.html', player_id=player_id, players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+    return render_template('player.html', player_id=player_id, court=get_court(), players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/add', methods=['POST'])
@@ -227,6 +337,8 @@ def add_entry():
         filename_tour = secure_filename(tour.filename)
         path_to_file_tour = os.path.join(app.config['UPLOAD_FOLDER_TOUR'], filename_tour)
         tour.save(os.path.join(app.config['UPLOAD_FOLDER_TOUR'], filename_tour))
+        db.execute('insert into tournaments (path_tour) values (?)',
+                   [path_to_file_tour])
     else:
         path_to_file_tour = None
     if file:
@@ -238,6 +350,7 @@ def add_entry():
     db.execute('insert into entries (title, text, date_of_article, images, tour) values (?, ?, ?, ?, ?)',
                  [request.form['title'], request.form['text'], dt, path_to_file, path_to_file_tour])
     db.commit()
+
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
@@ -254,7 +367,7 @@ def login():
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error, len_2016=len_2016, len_2017=len_2017)
+    return render_template('login.html', error=error, len_2016=len_2016, len_2017=len_2017, court=get_court(),)
 
 
 @app.route('/logout')
@@ -268,9 +381,11 @@ def logout():
 def show_method_1(year):
     if year == 2016:
         peremen = rating_show(parsed_string)
+        year = 2016
     elif year == 2017:
         peremen = rating_show(parsed_string_new)
-    return render_template("rating.html", peremen=peremen, players=get_data_players(), year=year, len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+        year = 2017
+    return render_template("rating.html", peremen=peremen, court=get_court(), players=get_data_players(), year=year, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/<int:year>/<int:tour_id>/')
@@ -282,7 +397,11 @@ def shopping(tour_id, year):
     date = MyCalendar()
     date_2016 = date.get_date(tour_id)
     date_2017 = date.get_date_2017(tour_id)
-    return render_template("tour.html", num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+    # db = get_db()
+    # cur = db.execute('select id, path_tour from tournaments order by id')
+    # tournaments = cur.fetchall()
+    tournaments = Tournaments.query
+    return render_template("tour.html", tournaments=tournaments, court=get_court(), num_tour=num_tour, tour_id=tour_id, year=year, date_2016=date_2016, date_2017=date_2017, players=get_data_players(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/player/<int:year>/<int:player_id>/')
@@ -301,22 +420,41 @@ def player(player_id, year):
         list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
         position = get_position(list_of_player[0], parsed_string)
         list_of_player.append(position)
-    return render_template("player.html", player_id=player_id, players=get_data_players(), list_of_player=list_of_player, len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+    return render_template("player.html", player_id=player_id, players=get_data_players(), court=get_court(), list_of_player=list_of_player, len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/rules/')
 def rules():
-    return render_template('test.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+    return render_template('test.html', players=get_data_players(), court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
 @app.route('/contacts/')
 def contacts():
-    return render_template('contacts.html', players=get_data_players(), len_2016=len_2016, len_2017=len_2017, list_of_players_from_year_2016=list_of_players_from_year_2016, list_of_players_from_year_2017=list_of_players_from_year_2017)
+    return render_template('contacts.html', players=get_data_players(), court=get_court(), len_2016=len_2016, len_2017=len_2017)
+
+
+@app.route('/coaches/')
+def coaches():
+    coach = Coaches.query.order_by(Coaches.id.desc())
+    return render_template('coaches.html', coach=coach, court=get_court(),
+                           len_2016=len_2016, len_2017=len_2017)
+
+
+@app.route('/courts/<current_court>/')
+def current_courts(current_court):
+    return render_template('current_court.html', current_court=current_court, court=get_court(), len_2016=len_2016, len_2017=len_2017)
+
+
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
 admin.add_view(MyModelView(Entries, dab.session))
 admin.add_view(MyModelView(Players, dab.session))
+admin.add_view(MyModelView(Tournaments, dab.session))
+admin.add_view(ImageView(Image, dab.session))
+admin.add_view(FileView(File, dab.session))
+admin.add_view(MyModelView(Courts, dab.session))
+admin.add_view(MyModelView(Coaches, dab.session))
 admin.add_view(AnalyticsView(name='BasePage', endpoint='analytics'))
 
 if __name__ == '__main__':

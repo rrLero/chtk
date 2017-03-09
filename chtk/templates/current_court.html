@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+
+    {% for cour in court %}
+    <ul class=entries>
+        {% if current_court == cour.name %}
+        <li>
+
+            <h2 class="entres-h2">{{ cour.name }} </h2>
+            {% if cour.path_hoto %}
+            <img src="/static/files/{{ cour.path_hoto }}" width="500" align="right" class="picture"><p>
+            {% endif %}
+        <table border="3">
+            <thead>
+            <tr>
+                <th>Адресс</th>
+                <th>Телефоны</th>
+                <th>Тип</th>
+                <th>Описание</th>
+            </tr>
+            </thead>
+            <tbody style="background-color: green; color:white;">
+            <tr>
+                <td class="td-court">{{ cour.adress }}</td>
+                <td class="td-court">{{ cour.phones }}</td>
+                <td class="td-court">{{ cour.type}}</td>
+                <td class="td-court">{{ cour.description}}</td>
+            </tr>
+            </tbody>
+      </table>
+                    <div style="clear:both;"></div>
+      </li>
+      {% endif %}
+</ul>
+    {% endfor %}
+
+{% endblock %}

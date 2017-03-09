@@ -13,7 +13,7 @@
                 {% else %}
                     <div align="center"> <img src="/static/players/no_photo.jpg" width="200" class="picture"></div>
                 {% endif %}
-                <h2 align="center">  Сыграно {{ list_of_player[1] }} турниров</h2><br>
+                <h2 align="center">  Сыграно турниров -{{ list_of_player[1] }} </h2><br>
                  <h2 align="center">{% if list_of_player[2] %} <img src="/static/gold.png" width="35" align="middle"> -  {{ list_of_player[2] }} {% endif %}
                  {% if list_of_player[3] %}<img src="/static/silver.png" width="35" align="middle"> -  {{ list_of_player[3] }} {% endif %}
                  {% if list_of_player[4] %}<img src="/static/bronze.png" width="35" align="middle"> -  {{ list_of_player[4] }} {% endif %} </h2>
