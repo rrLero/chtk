@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 
   {% block body %}
-			<div class="banner">
-			</div>
-<main>
-    <div class="col-left">
-        <section>
-            <h2 class="entres-h2">Парный рейтинг {{year}}</h2>
-            <div>
+	  <section>
+      <h2 class="entres-h2">Парный рейтинг {{year}}</h2>
+      <div>
         <table>
-            <thead>
+          <thead>
             <tr>
-                <th>#</th>
-                <th>Игрок</th>
-                <th>Балы</th>
+              <th>#</th>
+              <th>Игрок</th>
+              <th>Балы</th>
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
         {% for key, el in peremen.items() %}
             {% if el['Очки'] != 0 %}
             <tr>
                 {% set a,b = el['Фамилия'].split() %}
                 {% for player in players %}
                 {% if a == player.player_surname and b == player.player_name %}
-                <td class="td-position">{{ key }}</td><td class="td-player"><a href="/player/{{ year }}/{{ player.id }}/">{{ el['Фамилия'] }}</a></td><td class="td-rating">{{ el['Очки'] }}</td>
+            <td class="td-position">{{ key }}</td>
+            <td class="td-player">
+              <a href="/player/{{ year }}/{{ player.id }}/">{{ el['Фамилия'] }}</a>
+            </td>
+            <td class="td-rating">{{ el['Очки'] }}</td>
                 {% endif %}
                 {% endfor %}
             </tr>
