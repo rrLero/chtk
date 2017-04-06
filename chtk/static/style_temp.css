@@ -11,7 +11,7 @@ body {
   font-family: sans-serif;
   /*background: url(//background.jpg) no-repeat center center fixed;
   background-size: cover;*/
-  margin: 0px;
+  margin: 0;
 }
 main{
  padding: 10px 20px;
@@ -121,25 +121,88 @@ ul.hr li {
   color: grey;
 
 }
-.footer {
-  clear: left;
-  padding: 10px 0;
-  background-color: #CCC49F;
+footer {
+  background-color: #333;
+  height: 100px;
+
+
 }
+
+.footer-logo {
+  float: left;
+  width: 70px;
+  height: 70px;
+  margin-top: 18px;
+  margin-left: 30px;
+  background: url(images/logo2_mini.png) no-repeat center center;
+
+}
+.footer-logo:hover {
+  background: url(images/logo2_mini_orange.png) no-repeat center center;
+}
+
+.footer-copyright {
+  float: left;
+  margin-top: 30px;
+  margin-left: 20px;
+  font-size: 0.8em;
+  color: white;
+}
+.footer-social {
+  float: right;;
+  margin-top: 38px;
+  margin-right: 40px;
+}
+.footer-social p {
+  color: white;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  font-size: 0.8em;
+
+}
+.footer-social a {
+  display: inline-block;
+  background: url("images/sprite.png") 0 0 no-repeat;
+  width: 26px;
+  height: 25px;
+  vertical-align: middle;
+  margin-right: 2px;
+  opacity: .3;
+  -webkit-transition: opacity .3s ease;
+     -moz-transition: opacity .3s ease;
+      -ms-transition: opacity .3s ease;
+       -o-transition: opacity .3s ease;
+  transition: opacity .3s ease;
+}
+a.vk {
+  background-position: -61px -75px;
+}
+a.vk:hover {
+  opacity: 1;
+}
+a.fb {
+  background-position: -1px -75px;
+}
+a.fb:hover {
+  opacity: 1;
+}
+
+
 .picture {
   margin: 7px 12px 7px 0px; /* Отступы вокруг картинки */
   text-align: left;
   float: left;
 }
 .picture_right {
-  margin: 0px 0px 0px 0px; /* Отступы вокруг картинки */
+  margin: 0; /* Отступы вокруг картинки */
   text-align: left;
   float: left;
 }
 
 
 .rules {
-  margin: 0px 40px ; /* Отступы вокруг текста */
+  margin: 0 40px ; /* Отступы вокруг текста */
 }
 .title {
   font-family: 'sans-serif';
@@ -353,7 +416,7 @@ td a {
 
 .td-description {
   text-align: center;;
-  padding: 12px 12px 12px 12px;
+  padding: 12px;
   width: 220px;
 }
 
