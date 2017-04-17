@@ -2,38 +2,42 @@
 
 {% block body %}
 
-  
-        <section>
 
-<h2 class="entres-h2">Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}</h2>
-            <div>
-            {% for tour in tournaments %}
+<section>
 
-            {% if tour.path_tour and year == 2017 and 'static/tours/tournament_%s.xls' %tour_id == tour.path_tour %}
+  <h2 class="entres-h2">
+    Результаты турнира {% if year == 2016 %}{{ date_2016 }}{% endif %}{% if year == 2017 %}{{ date_2017 }}{% endif %}
+  </h2>
+  <div>
+    {% for tour in tournaments %}
 
-            <h2 class="entres-h2"><a href="/{{ tour.path_tour }}">СКАЧАТЬ</a></h2>
-            {% endif %}
+      {% if tour.path_tour and year == 2017 and 'static/tours/tournament_%s.xls' %tour_id == tour.path_tour %}
+
+        <h2 class="entres-h2">
+          <a href="/{{ tour.path_tour }}">СКАЧАТЬ</a>
+        </h2>
+      {% endif %}
+    {% endfor %}
+    <table>
+      <thead>
+        <tr>
+          <th>Игрок</th>
+          <th>Балы</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for el in num_tour %}
+          <tr>
+            {% for player in players %}
+              {% if player.player_surname == el[1][0] and player.player_name == el[1][1] %}
+                <td class="td-player"><a href="/player/{{ year }}/{{ player.id }}/">{{el[1][0]}} {{ el[1][1] }}</a></td><td class="td-rating">{{ el[0] }} </td>
+              {% endif %}
             {% endfor %}
-        <table>
-            <thead>
-            <tr>
-                <th>Игрок</th>
-                <th>Балы</th>
-            </tr>
-            </thead>
-            <tbody>
-                {% for el in num_tour %}
-                <tr>
-                    {% for player in players %}
-                    {% if player.player_surname == el[1][0] and player.player_name == el[1][1] %}
-                    <td class="td-player"><a href="/player/{{ year }}/{{ player.id }}/">{{el[1][0]}} {{ el[1][1] }}</a></td><td class="td-rating">{{ el[0] }} </td>
-                    {% endif %}
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-            </div>
-        </section>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
 
 {% endblock %}
