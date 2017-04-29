@@ -51,7 +51,7 @@ h2 {
 }
 
 .page {
-  margin: 0px auto;
+  margin: 0 auto;
   width: auto;
   /*border: 5px solid #ccc;*/
   /*padding: 0.8em;*/
@@ -67,7 +67,7 @@ h2 {
   border-bottom: 1px solid grey;
   padding: 15px;
 }
-.entries > li h2 {
+.entries>li h2 {
   margin-left: -1em;
 }
 .add-entry {
@@ -120,6 +120,9 @@ ul.hr li {
   text-align: left;
   color: grey;
 
+}
+.section {
+  min-height: 1500px;
 }
 footer {
   background-color: #333;
@@ -190,7 +193,7 @@ a.fb:hover {
 
 
 .picture {
-  margin: 7px 12px 7px 0px; /* Отступы вокруг картинки */
+  margin: 7px 12px 7px 0; /* Отступы вокруг картинки */
   text-align: left;
   float: left;
 }
@@ -339,14 +342,8 @@ width: 180px
 
 }
 .adv-2 {
-
   height: 350px;
   margin: 10px 7px 15px;
-
-}
-
-.baner {
-
 }
 .entres-h2 {
   text-align: left;
@@ -358,7 +355,7 @@ width: 180px
   padding-top: 5px;
 }
 .twix {
-  padding: 0px;
+  padding: 0;
   margin-left: 240px;
   margin-top: 15px;
 }
@@ -381,9 +378,6 @@ tr th {
 tr {
   height: 30px;
 
-
-}
-td {
 
 }
 td a {
@@ -470,9 +464,53 @@ tr:hover a {
                     height: 2em;
                     width: 2em;
                     line-height: 2em;
-                    border: .3em solid white;
+                    border: 0.3em solid white;
                     text-align: center;
                     font-weight: bold;
                     border-radius: 2em;
                     transition: all .3s ease-out;
                     }
+/*------------------coaches-------------*/
+.coaches-container {
+  width: 98%;
+  margin: 10px auto;
+  text-align: center;
+}
+.coaches-row {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px auto;
+}
+.coaches-item {
+  flex-basis: 440px;
+  margin: 15px;
+  border: 1px dashed lightgrey;
+}
+.coaches-block {
+  width: 52%;
+  margin: 0 5px;
+  vertical-align: top;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.coaches-img {
+  margin: 9px 5px 5px;
+}
+.coaches-name {
+  width: 60%;
+  margin: 10px auto;
+  color: #55583a;
+  font-size: 1.3em;
+}
+.telefon-hidden {
+  visibility: hidden;
+}
+.coaches-description {
+  line-height: 1.5em;
+}
+.coaches-block p {
+  margin-top: 15px;
+}
