@@ -11,7 +11,7 @@
   <div>
     {% for tour in tournaments %}
 
-      {% if tour.path_tour and year == 2017 and 'static/tours/tournament_%s.xls or 'static/tours/tournament_%s.xlsx' %tour_id == tour.path_tour %}
+      {% if tour.path_tour and year == 2017 and 'static/tours/tournament_%s.xls' %tour_id == tour.path_tour or 'static/tours/tournament_%s.xlsx' %tour_id == tour.path_tour%}
 
         <h2 class="entres-h2">
           <a href="/{{ tour.path_tour }}">СКАЧАТЬ</a>
