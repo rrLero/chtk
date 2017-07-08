@@ -435,7 +435,7 @@ def contacts():
 
 @app.route('/coaches/')
 def coaches():
-    coach = Coaches.query.order_by(Coaches.id.desc())
+    coach = Coaches.query.order_by(Coaches.id)
     return render_template('coaches.html', coach=coach, court=get_court(),
                            len_2016=len_2016, len_2017=len_2017)
 
