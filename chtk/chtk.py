@@ -445,6 +445,15 @@ def current_courts(current_court):
     return render_template('current_court.html', current_court=current_court, court=get_court(), len_2016=len_2016, len_2017=len_2017)
 
 
+# new API FOR NEW SITE
+@app.route('/api/news')
+def api_news():
+    page = 1
+    pagination = Entries.query.order_by(Entries.id.desc()).paginate(page, 6, False)
+    db = get_db()
+    cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
+    players = cur_1.fetchall()
+    return jsonify(pagination)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
