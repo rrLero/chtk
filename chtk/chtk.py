@@ -454,7 +454,9 @@ def api_news():
     db = get_db()
     cur_1 = db.execute('select id, player_name, player_surname, path_photo from players order by player_surname')
     players = cur_1.fetchall()
-    return jsonify(pagination.items)
+    news_list = [{'id': entry.id, 'date': entry.date_of_article, 'title': entry.title,
+                       'text': entry.text, 'image': entry.images, 'tour': entry.tour} for entry in pagination.items]
+    return jsonify(news_list)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
