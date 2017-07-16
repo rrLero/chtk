@@ -467,6 +467,17 @@ def api_courts():
     return jsonify(result)
 
 
+@app.route('/api/rating/<int:year>/')
+def api_rating(year):
+    if year == 2016:
+        peremen = rating_show(parsed_string)
+        year = 2016
+    elif year == 2017:
+        peremen = rating_show(parsed_string_new)
+        year = 2017
+    return jsonify(peremen)
+
+
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
