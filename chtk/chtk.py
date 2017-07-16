@@ -459,6 +459,16 @@ def api_news():
     return jsonify(news_list)
 
 
+@app.route('/api/courts')
+def api_courts():
+    courts = get_court()
+    result = [{'id': court.id, 'name': court.name, 'adress': court.adress, 'phones': court.phones, 'type': court.type,
+               'description': court.description, 'image': court.path_hoto} for court in courts]
+    return jsonify(result)
+
+
+
+
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
 admin.add_view(MyModelView(Entries, dab.session))
 admin.add_view(MyModelView(Players, dab.session))
