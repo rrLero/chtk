@@ -476,7 +476,7 @@ def api_rating(year):
     elif year == 2017:
         peremen = rating_show(parsed_string_new)
         year = 2017
-    new_array = [{'surname': val['Фамилия'], 'points': val['Очки']} for key, val in peremen.items()]
+    new_array = [{'place': key, 'surname': val['Фамилия'], 'points': val['Очки']} for key, val in peremen.items() if val['Очки'] != 0]
     return jsonify(new_array)
 
 
