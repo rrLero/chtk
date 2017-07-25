@@ -18,9 +18,10 @@ from flask_admin.contrib import sqla
 from flask_admin import BaseView, expose, form
 from jinja2 import Markup
 from sqlalchemy.event import listens_for
-
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 
 
 app.config.from_object(__name__) # load config from this file , chtk.py
