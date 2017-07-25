@@ -470,7 +470,6 @@ def api_courts():
 
 @app.route('/api/rating/<int:year>/')
 def api_rating(year):
-
     if year == 2016:
         peremen = rating_show(parsed_string)
         year = 2016
@@ -481,6 +480,12 @@ def api_rating(year):
     return jsonify(new_array)
 
 
+@app.route('/api/coaches')
+def api_coaches():
+    coaches = Coaches.query.order_by(Coaches.id)
+    result = [{'id': coach.id, 'name': coach.name, 'surname': coach.surname, 'phones': coach.phones,
+               'description': coach.description, 'image': coach.path_photo} for coach in coaches]
+    return jsonify(result)
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
