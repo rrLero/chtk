@@ -480,6 +480,7 @@ def api_rating(year):
     return jsonify(new_array)
 
 
+
 @app.route('/api/coaches')
 def api_coaches():
     coaches = Coaches.query.order_by(Coaches.id)
