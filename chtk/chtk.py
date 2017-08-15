@@ -496,16 +496,18 @@ def api_player(player_id, year):
     surname = db.execute('select player_surname from players where id = %d' % player_id)
     surname = surname.fetchone()
     stats = StatsPlayers()
+    path_photo = db.execute('select path_photo from players where id = %d' % player_id)
+    path_photo = path_photo.fetchone()
     if year == 2017:
         list_of_player = stats.get_number_of_tours(parsed_string_new, name[0], surname[0])
         position = get_position(list_of_player[0], parsed_string_new)
         list_of_player.append(position)
-        return jsonify({'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5]})
+        return jsonify({'name': name[0], 'surname': surname[0], 'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5], 'path_photo': path_photo[0]})
     elif year == 2016:
         list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
         position = get_position(list_of_player[0], parsed_string)
         list_of_player.append(position)
-        return jsonify({'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5]})
+        return jsonify({'name': name[0], 'surname': surname[0], 'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5], 'path_photo': path_photo[0]})
     return jsonify([])
 
 
