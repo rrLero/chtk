@@ -470,6 +470,7 @@ def api_courts():
 
 @app.route('/api/rating/<int:year>/')
 def api_rating(year):
+    players = get_data_players()
     if year == 2016:
         peremen = rating_show(parsed_string)
         year = 2016
@@ -477,6 +478,10 @@ def api_rating(year):
         peremen = rating_show(parsed_string_new)
         year = 2017
     new_array = [{'place': key, 'surname': val['Фамилия'], 'points': val['Очки']} for key, val in peremen.items() if val['Очки'] != 0]
+    for array in new_array:
+        for player in players:
+            if array['surname'] == player[2] + ' ' + player[1]:
+                array['id'] = player[0]
     return jsonify(new_array)
 
 
@@ -509,8 +514,6 @@ def api_player(player_id, year):
         list_of_player.append(position)
         return jsonify({'name': name[0], 'surname': surname[0], 'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5], 'path_photo': path_photo[0]})
     return jsonify([])
-
-
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
