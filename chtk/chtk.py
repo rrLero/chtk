@@ -480,13 +480,35 @@ def api_rating(year):
     return jsonify(new_array)
 
 
-
 @app.route('/api/coaches')
 def api_coaches():
     coaches = Coaches.query.order_by(Coaches.id)
     result = [{'id': coach.id, 'name': coach.name, 'surname': coach.surname, 'phones': coach.phones,
                'description': coach.description, 'image': coach.path_photo} for coach in coaches]
     return jsonify(result)
+
+
+@app.route('/api/player/<int:year>/<int:player_id>/')
+def api_player(player_id, year):
+    db = get_db()
+    name = db.execute('select player_name from players where id = %d' % player_id)
+    name = name.fetchone()
+    surname = db.execute('select player_surname from players where id = %d' % player_id)
+    surname = surname.fetchone()
+    stats = StatsPlayers()
+    if year == 2017:
+        list_of_player = stats.get_number_of_tours(parsed_string_new, name[0], surname[0])
+        position = get_position(list_of_player[0], parsed_string_new)
+        list_of_player.append(position)
+        return jsonify({'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5]})
+    elif year == 2016:
+        list_of_player = stats.get_number_of_tours(parsed_string, name[0], surname[0])
+        position = get_position(list_of_player[0], parsed_string)
+        list_of_player.append(position)
+        return jsonify({'points': list_of_player[0], 'played': list_of_player[1], 'place1': list_of_player[2], 'place2': list_of_player[3], 'place3': list_of_player[4], 'position': list_of_player[5]})
+    return jsonify([])
+
+
 
 
 admin = Admin(app, name='chtk', template_mode='bootstrap3')
